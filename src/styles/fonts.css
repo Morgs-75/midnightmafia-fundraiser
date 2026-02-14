@@ -1,0 +1,46 @@
+/* Load fonts with optimal rendering settings */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$!.,?%()[]');
+
+/* Define Bebas Neue with optimal font-display */
+@font-face {
+  font-family: 'Bebas Neue Optimized';
+  src: local('Bebas Neue'), local('BebasNeue-Regular');
+  font-display: block;
+  font-weight: 400;
+}
+
+/* Improve font rendering - make text crisp and sharp */
+* {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility;
+}
+
+/* Force sharp rendering on ALL elements */
+body, html, div, p, h1, h2, h3, h4, h5, h6, span {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Extra sharpness for Bebas Neue - target multiple ways */
+[style*="Bebas Neue"],
+[style*="Bebas"],
+.font-bebas,
+h1, h2, h3 {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: geometricPrecision !important;
+  font-variant-ligatures: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Specific targeting for text that uses Bebas Neue font */
+p[style*="Bebas"],
+div[style*="Bebas"] {
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 0.1px rgba(255, 255, 255, 0.3);
+}

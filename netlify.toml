@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify"
+
+[functions]
+  node_bundler = "esbuild"
+
+[dev]
+  command = "npm run dev"
+  targetPort = 5173
+  framework = "#custom"
+
+# Schedule: Release expired holds every 2 minutes (production only)
+# [[plugins]]
+#   package = "@netlify/plugin-functions-core"
+
+# Scheduled function to release expired holds
+# [functions.release-expired-holds]
+#   schedule = "*/2 * * * *"

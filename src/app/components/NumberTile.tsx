@@ -1,0 +1,85 @@
+import { motion } from "motion/react";
+import { NumberData } from "../types";
+import { Sparkles, Crown } from "lucide-react";
+
+interface NumberTileProps {
+  data: NumberData;
+  isSelected: boolean;
+  onSelect: (number: number) => void;
+}
+
+export function NumberTile({ data, isSelected, onSelect }: NumberTileProps) {
+  const { number, status, displayName, isTeamNumber } = data;
+
+  const getStatusStyles = () => {
+    if (isTeamNumber) {
+      // Team numbers get special purple/black mafia styling
+      return "bg-gradient-to-br from-purple-700/40 to-black border-2 border-purple-400 shadow-lg shadow-purple-500/40";
+    }
+    
+    switch (status) {
+      case "sold":
+        return "bg-gradient-to-br from-yellow-600/30 to-yellow-700/30 border-2 border-yellow-500 shadow-lg shadow-yellow-500/30";
+      case "held":
+        return "bg-gray-800/60 border-2 border-yellow-500/40 opacity-50";
+      case "available":
+      default:
+        return isSelected
+          ? "bg-gradient-to-br from-purple-600/40 to-pink-600/40 border-2 border-purple-400"
+          : "bg-gray-900/80 border-2 border-gray-700 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20";
+    }
+  };
+
+  const isClickable = status === "available";
+
+  return (
+    <motion.button
+      onClick={() => isClickable && onSelect(number)}
+      disabled={!isClickable}
+      className={`relative aspect-square rounded-lg transition-all duration-200 ${getStatusStyles()}`}
+      whileHover={isClickable ? { scale: 1.05 } : {}}
+      whileTap={isClickable ? { scale: 0.95 } : {}}
+    >
+      {/* Team logo/crown for team numbers */}
+      {isTeamNumber && (
+        <div className="absolute -top-1 -right-1 bg-purple-600 rounded-full p-1 shadow-lg">
+          <Crown className="w-4 h-4 text-yellow-300 fill-yellow-300" />
+        </div>
+      )}
+      
+      {/* Sparkle for regular sold numbers */}
+      {status === "sold" && !isTeamNumber && (
+        <div className="absolute -top-1 -right-1">
+          <Sparkles className="w-4 h-4 text-yellow-400" />
+        </div>
+      )}
+      
+      <div className="flex flex-col items-center justify-center h-full p-2">
+        <span
+          className={`text-2xl md:text-3xl ${
+            isTeamNumber
+              ? "text-purple-300"
+              : status === "sold"
+              ? "text-yellow-400"
+              : status === "held"
+              ? "text-gray-500"
+              : isSelected
+              ? "text-white"
+              : "text-gray-300"
+          }`}
+          style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+        >
+          {number}
+        </span>
+        
+        {status === "sold" && displayName && (
+          <span className={`text-xs mt-1 truncate max-w-full px-1 ${
+            isTeamNumber ? "text-purple-200/90" : "text-yellow-300/80"
+          }`} style={{ fontFamily: 'Poppins, sans-serif' }}>
+            {displayName}
+          </span>
+        )}
+      </div>
+    </motion.button>
+  );
+}
