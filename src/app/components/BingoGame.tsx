@@ -13,6 +13,7 @@ import { PrizeDrawnPopup } from "./PrizeDrawnPopup";
 import { MessageBubble } from "./MessageBubble";
 import { QRCodeModal } from "./QRCodeModal";
 import { ShareQRButton } from "./ShareQRButton";
+import { WelcomeHint } from "./WelcomeHint";
 import { NumberData } from "../types";
 import {
   generateMockNumbers,
@@ -369,6 +370,9 @@ export function BingoGame() {
         onClose={() => setIsQRModalOpen(false)}
         url={currentUrl}
       />
+
+      {/* Welcome Hint Popup */}
+      <WelcomeHint />
 
       {/* Casino-style UI Components */}
       <FloatingBadges />
