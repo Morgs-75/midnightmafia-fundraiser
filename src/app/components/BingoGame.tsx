@@ -202,57 +202,9 @@ export function BingoGame() {
     setIsCheckoutOpen(true);
   };
 
-  const handleConfirmPurchase = (data: {
-    displayName: string;
-    message: string;
-    email: string;
-  }) => {
-    // Use "Anonymous" if display name is empty
-    const finalDisplayName =
-      data.displayName.trim() || "Anonymous";
-
-    // Save last purchase for Instagram story
-    // Note: Numbers will be updated via Supabase realtime when webhook processes payment
-    setLastPurchase({
-      numbers: [...selectedNumbers],
-      displayName: finalDisplayName,
-      message: data.message,
-    });
-
-    // Show success state
-    setPurchaseComplete(true);
-    setIsCheckoutOpen(false);
-    setSelectedNumbers([]);
-    setIsSweepBonusMode(false); // Exit sweep bonus mode after purchase
-
-    // Trigger confetti effect
-    createConfetti();
-
-    // Create message bubbles for each purchased number
-    const bubbles = selectedNumbers.map((num, index) => {
-      // Calculate grid position (0-indexed, 10x10 grid)
-      const row = Math.floor((num - 1) / 10);
-      const col = (num - 1) % 10;
-
-      return {
-        id: `bubble-${Date.now()}-${num}`,
-        number: num,
-        displayName: finalDisplayName,
-        message: data.message,
-        gridPosition: { row, col },
-      };
-    });
-
-    // Stagger the bubble animations
-    bubbles.forEach((bubble, index) => {
-      setTimeout(() => {
-        setMessageBubbles((prev) => [...prev, bubble]);
-      }, index * 300); // 300ms delay between each bubble
-    });
-
-    // Show Thank You modal immediately
-    setIsThankYouOpen(true);
-  };
+  // Note: Payment flow now redirects to Stripe and returns to success.html
+  // Numbers are updated via webhook + Supabase realtime
+  // No need for manual state updates here
 
   const handleThankYouClose = () => {
     setIsThankYouOpen(false);
@@ -506,7 +458,6 @@ export function BingoGame() {
           setIsCheckoutOpen(false);
           setSelectedNumbers([]); // Clear selection when closing checkout
         }}
-        onConfirm={handleConfirmPurchase}
       />
 
       <UpsellModal

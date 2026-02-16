@@ -51,7 +51,6 @@ export function useSupporters() {
         },
         (payload) => {
           if (payload.new.status === 'sold') {
-            console.log('New supporter:', payload);
             loadSupporters();
           }
         }

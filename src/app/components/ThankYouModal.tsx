@@ -66,7 +66,8 @@ export function ThankYouModal({ isOpen, displayName, numbers, onClose }: ThankYo
       await navigator.clipboard.writeText(fullMessage);
       alert("Message and link copied! 💜");
     } catch (err) {
-      console.log("Clipboard failed:", err);
+      // Clipboard API may fail in some browsers or contexts
+      console.error("Clipboard failed:", err);
     }
   };
 

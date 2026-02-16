@@ -8,10 +8,9 @@ interface CheckoutModalProps {
   selectedNumbers: number[];
   pricePerNumber: number;
   onClose: () => void;
-  onConfirm: (data: { displayName: string; message: string; email: string }) => void;
 }
 
-export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose, onConfirm }: CheckoutModalProps) {
+export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose }: CheckoutModalProps) {
   const [displayName, setDisplayName] = useState("");
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");

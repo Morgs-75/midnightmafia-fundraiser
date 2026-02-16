@@ -1,7 +1,43 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Server-side validation helpers
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone) => {
+  if (!phone) return true; // Phone is optional
+  const phoneDigits = phone.replace(/\s/g, '');
+  const phoneRegex = /^(\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
+  return phoneRegex.test(phoneDigits);
+};
+
 export async function handler(event) {
   const { numbers, displayName, email, phone, message, boardId } = JSON.parse(event.body);
+
+  // Validate input
+  if (!displayName || typeof displayName !== 'string') {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Display name is required' }) };
+  }
+  if (displayName.trim().length < 2 || displayName.trim().length > 50) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Display name must be 2-50 characters' }) };
+  }
+  if (!email || !validateEmail(email)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Valid email is required' }) };
+  }
+  if (phone && !validatePhone(phone)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid phone number format' }) };
+  }
+  if (message && message.length > 200) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Message must be less than 200 characters' }) };
+  }
+  if (!Array.isArray(numbers) || numbers.length === 0 || numbers.length > 10) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Must select 1-10 numbers' }) };
+  }
+  if (!boardId) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Board ID is required' }) };
+  }
 
   const supabase = createClient(
     process.env.SUPABASE_URL,

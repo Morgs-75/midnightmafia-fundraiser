@@ -51,7 +51,6 @@ export function useNumbers() {
           filter: `board_id=eq.${BOARD_ID}`,
         },
         (payload) => {
-          console.log('Realtime update:', payload);
           loadNumbers(); // Reload all numbers on any change
         }
       )
