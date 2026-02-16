@@ -92,14 +92,10 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         </div>
       )}
 
-      {/* TEAM badge - absolutely positioned */}
+      {/* TEAM star - absolutely positioned */}
       {status === "sold" && isTeamNumber && (
         <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
-          <div className="bg-purple-600 rounded px-1.5 py-0.5 shadow-md border border-yellow-400">
-            <span className="text-[10px] font-bold text-yellow-300 whitespace-nowrap" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              TEAM
-            </span>
-          </div>
+          <span className="text-xl">⭐</span>
         </div>
       )}
 
