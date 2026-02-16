@@ -243,22 +243,36 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
                   </div>
                   
                   {/* Collapsible Encouragement Message */}
-                  <div className="border border-gray-700 rounded-lg overflow-hidden">
-                    <button
+                  <div className="border border-purple-500/30 rounded-lg overflow-hidden">
+                    <motion.button
                       type="button"
                       onClick={() => setIsMessageExpanded(!isMessageExpanded)}
-                      className="w-full px-4 py-3 bg-gray-800/50 hover:bg-gray-800 transition-colors flex items-center justify-between"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-purple-600/20 to-pink-600/20 hover:from-purple-600/30 hover:to-pink-600/30 transition-colors flex items-center justify-between"
+                      animate={!isMessageExpanded ? {
+                        scale: [1, 1.02, 1],
+                        x: [0, -2, 2, -2, 2, 0],
+                        boxShadow: [
+                          "0 0 0 0 rgba(168, 85, 247, 0)",
+                          "0 0 15px 3px rgba(168, 85, 247, 0.4)",
+                          "0 0 0 0 rgba(168, 85, 247, 0)"
+                        ]
+                      } : {}}
+                      transition={!isMessageExpanded ? {
+                        scale: { duration: 2, repeat: Infinity },
+                        x: { duration: 0.5, repeat: Infinity, repeatType: "reverse" },
+                        boxShadow: { duration: 2, repeat: Infinity }
+                      } : {}}
                     >
-                      <span className="text-sm font-medium text-gray-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                        💬 Add Encouragement Message <span className="text-gray-500 text-xs">(Optional)</span>
+                      <span className="text-sm font-medium text-purple-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                        💬 Add Encouragement Message <span className="text-purple-400 text-xs">(Optional)</span>
                       </span>
                       <motion.div
                         animate={{ rotate: isMessageExpanded ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                        <ChevronDown className="w-5 h-5 text-purple-400" />
                       </motion.div>
-                    </button>
+                    </motion.button>
                     <AnimatePresence>
                       {isMessageExpanded && (
                         <motion.div
