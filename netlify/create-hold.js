@@ -36,14 +36,35 @@ export async function handler(event) {
     .single();
 
   // Mark numbers as held
-  await supabase
+  const { data: updatedNumbers, error: updateError } = await supabase
     .from('numbers')
     .update({ status: 'held', hold_expires_at: expiresAt })
     .in('number', numbers)
-    .eq('board_id', boardId);
+    .eq('board_id', boardId)
+    .select();
+
+  if (updateError) {
+    console.error('Error updating numbers to held:', updateError);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed to mark numbers as held', details: updateError.message })
+    };
+  }
+
+  console.log(`✅ Marked ${updatedNumbers?.length || 0} numbers as held`);
+  console.log('Numbers:', numbers);
+  console.log('Board ID:', boardId);
+
+  if (!updatedNumbers || updatedNumbers.length === 0) {
+    console.error('⚠️ No numbers were updated to held status!');
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'No numbers were marked as held' })
+    };
+  }
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ holdId: hold.id })
+    body: JSON.stringify({ holdId: hold.id, numbersHeld: updatedNumbers.length })
   };
 }
