@@ -102,7 +102,45 @@
       Your payment was successful! Your number(s) are now locked in.
       The board will update automatically and you'll see your name and message appear shortly.
     </p>
+    <button onclick="shareToInstagram()" class="btn" style="margin-bottom: 16px; background: linear-gradient(90deg, #ff4fd8 0%, #7c3cff 50%, #ff4fd8 100%);">
+      📱 Share on Instagram Story
+    </button>
     <a href="/" class="btn">Back to Board</a>
   </div>
+
+  <script>
+    async function shareToInstagram() {
+      const shareText = "I just supported Midnight Mafia Cheer on their journey to Worlds 2026! 💜⭐ Help them reach their goal!";
+      const shareUrl = window.location.origin;
+      const fullMessage = shareText + "\n\n" + shareUrl;
+
+      // Try Web Share API first (works great on mobile for Instagram stories)
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Support Midnight Mafia Cheer",
+            text: fullMessage,
+          });
+        } catch (err) {
+          // User cancelled or error - fallback to copying
+          console.log("Share cancelled or failed:", err);
+          copyToClipboard(fullMessage);
+        }
+      } else {
+        // Fallback: Copy to clipboard
+        copyToClipboard(fullMessage);
+      }
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("Message and link copied! Paste it in your Instagram story 💜");
+      } catch (err) {
+        console.log("Clipboard failed:", err);
+        alert("Unable to copy. Please share manually: " + window.location.origin);
+      }
+    }
+  </script>
 </body>
 </html>
