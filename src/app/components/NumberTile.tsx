@@ -91,7 +91,18 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
           <Sparkles className="w-4 h-4 text-pink-400" />
         </div>
       )}
-      
+
+      {/* TEAM badge - absolutely positioned */}
+      {status === "sold" && isTeamNumber && (
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+          <div className="bg-purple-600 rounded px-1.5 py-0.5 shadow-md border border-yellow-400">
+            <span className="text-[10px] font-bold text-yellow-300 whitespace-nowrap" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              TEAM
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center justify-center h-full p-2">
         <span
           className={`text-2xl md:text-3xl ${
@@ -109,14 +120,6 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         >
           {number}
         </span>
-        
-        {status === "sold" && isTeamNumber && (
-          <div className="mt-1 bg-purple-600 rounded-full px-2 py-0.5 shadow-lg border border-yellow-400">
-            <span className="text-xs font-bold text-yellow-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              ⭐ TEAM
-            </span>
-          </div>
-        )}
 
         {status === "sold" && !isTeamNumber && displayName && (
           <span className="text-xs mt-1 truncate max-w-full px-1 text-pink-300/80" style={{ fontFamily: 'Poppins, sans-serif' }}>
