@@ -20,6 +20,7 @@ import {
   generateMockNumbers,
 } from "../mockData";
 import { useNumbers } from "../../lib/useNumbers";
+import { calculateTotal as calculatePricing, PRICE_PER_NUMBER } from "../../lib/pricing";
 import { motion } from "motion/react";
 import { Sparkles } from "lucide-react";
 
@@ -41,8 +42,8 @@ const CONFIG = {
   // Team departure date (for display purposes)
   departureDate: "April 16, 2026",
 
-  // Pricing: $25 each OR 5 for $100 (5th number is FREE!)
-  pricePerNumber: 25,
+  // Pricing: Use shared pricing constants from lib/pricing.ts
+  pricePerNumber: PRICE_PER_NUMBER,
   bulkDeal: {
     quantity: 5,
     price: 100,
@@ -58,29 +59,6 @@ const CONFIG = {
   contactEmail: "jemmarmorgan@gmail.com",
 };
 
-// Helper function to calculate total with bulk pricing
-// Buy 5 for $100, get the 6th FREE! (so every 6 numbers costs $100)
-export const calculateTotal = (
-  count: number,
-): { total: number; savings: number; freeNumbers: number } => {
-  const regularPrice = count * CONFIG.pricePerNumber;
-
-  const completePackages = Math.floor(count / 6); // Each package = 6 numbers for $100
-  const remainder = count % 6;
-
-  // Each complete package costs $100
-  // Remaining numbers (1-5) cost $25 each, but cap at $100 for 5 numbers
-  const remainderCost =
-    remainder > 0
-      ? Math.min(remainder * CONFIG.pricePerNumber, 100)
-      : 0;
-  const total = completePackages * 100 + remainderCost;
-
-  const savings = regularPrice - total;
-  const freeNumbers = completePackages; // One free number per complete package
-
-  return { total, savings, freeNumbers };
-};
 // ========================================
 
 export function BingoGame() {
@@ -233,21 +211,8 @@ export function BingoGame() {
     const finalDisplayName =
       data.displayName.trim() || "Anonymous";
 
-    // Update numbers to sold status
-    setNumbers((prev) =>
-      prev.map((num) =>
-        selectedNumbers.includes(num.number)
-          ? {
-              ...num,
-              status: "sold",
-              displayName: finalDisplayName,
-              message: data.message,
-            }
-          : num,
-      ),
-    );
-
     // Save last purchase for Instagram story
+    // Note: Numbers will be updated via Supabase realtime when webhook processes payment
     setLastPurchase({
       numbers: [...selectedNumbers],
       displayName: finalDisplayName,

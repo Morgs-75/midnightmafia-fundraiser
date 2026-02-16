@@ -50,23 +50,20 @@ export async function handler(event) {
   }
 
   if (!signatureVerified) {
-    console.error('⚠️ All signature verification attempts failed');
+    console.error('⚠️ SECURITY: Signature verification failed');
     console.error('Headers:', JSON.stringify(event.headers, null, 2));
     console.error('Is base64:', event.isBase64Encoded);
     console.error('Body type:', typeof event.body);
     console.error('Body length:', event.body?.length);
 
-    // TEMPORARY: For debugging, parse the event anyway (REMOVE IN PRODUCTION)
-    try {
-      const parsedEvent = JSON.parse(event.body);
-      console.log('⚠️ BYPASSING SIGNATURE CHECK FOR DEBUG - Event type:', parsedEvent.type);
-      stripeEvent = parsedEvent;
-    } catch (parseErr) {
-      return {
-        statusCode: 400,
-        body: 'Signature verification failed and body not parseable'
-      };
-    }
+    // SECURITY: Do not process webhooks with invalid signatures
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'Signature verification failed',
+        message: 'Webhook signature could not be verified. This request has been rejected for security.'
+      })
+    };
   }
 
   console.log('✅ Webhook verified:', stripeEvent.type);
@@ -120,6 +117,25 @@ export async function handler(event) {
       console.log('   Display name:', hold.display_name);
       console.log('   Email:', hold.email);
 
+      // Check for duplicate processing (idempotency)
+      const { data: existingPurchase } = await supabase
+        .from('purchases')
+        .select('id')
+        .eq('stripe_payment_intent', session.payment_intent)
+        .maybeSingle();
+
+      if (existingPurchase) {
+        console.log('⚠️ Payment already processed, skipping (idempotent)');
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            received: true,
+            processed: false,
+            message: 'Payment already processed'
+          })
+        };
+      }
+
       // Mark numbers as sold (and clear promo_code since this is a paid purchase)
       const { data: updatedNumbers, error: updateError } = await supabase
         .from('numbers')
@@ -163,6 +179,15 @@ export async function handler(event) {
 
       if (purchaseError) {
         console.error('❌ Error creating purchase:', purchaseError.message);
+
+        // ROLLBACK: Revert numbers back to held status
+        console.log('⚠️ Rolling back: reverting numbers to held status');
+        await supabase
+          .from('numbers')
+          .update({ status: 'held' })
+          .eq('board_id', hold.board_id)
+          .in('number', updatedNumbers.map(n => n.number));
+
         return {
           statusCode: 500,
           body: JSON.stringify({
@@ -173,6 +198,20 @@ export async function handler(event) {
       }
 
       console.log('✅ Created purchase record:', purchase?.[0]?.id);
+
+      // Clean up: Delete the hold record
+      const { error: deleteHoldError } = await supabase
+        .from('holds')
+        .delete()
+        .eq('id', holdId);
+
+      if (deleteHoldError) {
+        console.warn('⚠️ Could not delete hold record:', deleteHoldError.message);
+        // Don't fail the webhook for this - payment was successful
+      } else {
+        console.log('✅ Deleted hold record');
+      }
+
       console.log('✅✅✅ Payment processed successfully');
     } catch (error) {
       console.error('Error processing payment:', error);

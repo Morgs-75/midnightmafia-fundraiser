@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Lock, Sparkles, Gift, TrendingUp, Zap, ChevronDown } from "lucide-react";
+import { calculatePrice, calculateStripeFee, calculateTotalWithFees, PRICE_PER_NUMBER } from "../../lib/pricing";
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -9,58 +10,6 @@ interface CheckoutModalProps {
   onClose: () => void;
   onConfirm: (data: { displayName: string; message: string; email: string }) => void;
 }
-
-// Helper to calculate price with bulk deal
-// Buy 4 for $100, get the 5th FREE
-// Special deal: 10 numbers = $175
-// Once you have 5 numbers, you can get 6 more for $100 each package (11 = $200)
-const calculatePrice = (count: number, pricePerNumber: number) => {
-  if (count === 0) return 0;
-
-  // First tier: 1-4 numbers at $25 each
-  if (count <= 4) {
-    return count * pricePerNumber;
-  }
-
-  // First package: 5 numbers for $100 (buy 4, get 1 free)
-  if (count === 5) {
-    return 100;
-  }
-
-  // 6-9 numbers: $100 for first 5, then $25 each for remainder
-  if (count >= 6 && count <= 9) {
-    return 100 + ((count - 5) * pricePerNumber);
-  }
-
-  // Special deal: 10 numbers = $175
-  if (count === 10) {
-    return 175;
-  }
-
-  // After 10 numbers, calculate based on packages
-  // 11 numbers = $200 (5 + 6 for $100 each)
-  // count = 5 + additional
-  // First 5 = $100, then packages of 6 for $100 each
-  const additional = count - 5;
-  const additionalPackages = Math.floor(additional / 6);
-  const remainder = additional % 6;
-
-  // Base: $100 for first 5 numbers
-  // Additional complete packages: additionalPackages * $100
-  // Remainder numbers: remainder * $25 each
-  return 100 + (additionalPackages * 100) + (remainder * pricePerNumber);
-};
-
-// Calculate Stripe fees (1.75% + $0.30 AUD)
-const calculateStripeFee = (subtotal: number) => {
-  return (subtotal * 0.0175) + 0.30;
-};
-
-// Calculate total including Stripe fees
-const calculateTotalWithFees = (subtotal: number) => {
-  const fee = calculateStripeFee(subtotal);
-  return subtotal + fee;
-};
 
 export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose, onConfirm }: CheckoutModalProps) {
   const [displayName, setDisplayName] = useState("");
@@ -73,10 +22,10 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
   const [isMessageExpanded, setIsMessageExpanded] = useState(false);
 
   const count = selectedNumbers.length;
-  const subtotal = calculatePrice(count, pricePerNumber);
+  const subtotal = calculatePrice(count);
   const stripeFee = calculateStripeFee(subtotal);
   const total = calculateTotalWithFees(subtotal);
-  const regularPrice = count * pricePerNumber;
+  const regularPrice = count * PRICE_PER_NUMBER;
   const savings = regularPrice - subtotal;
   const freeNumbers = Math.floor(count / 6); // One free per complete package
 
@@ -361,7 +310,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
                         </div>
                         <div className="space-y-2 text-sm" style={{ fontFamily: 'Poppins, sans-serif' }}>
                           <div className="flex justify-between text-gray-300">
-                            <span>Regular Price ({count} × ${pricePerNumber})</span>
+                            <span>Regular Price ({count} × ${PRICE_PER_NUMBER})</span>
                             <span>${regularPrice}</span>
                           </div>
                           <div className="flex justify-between text-green-400 font-semibold">
