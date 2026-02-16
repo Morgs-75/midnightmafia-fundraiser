@@ -62,7 +62,7 @@ export function QRCodeModal({ isOpen, onClose, url }: QRCodeModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[110] w-full max-w-md mx-4"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[110] w-[calc(100%-3rem)] max-w-md"
           >
             <div className="relative bg-gradient-to-br from-gray-900 via-purple-900/30 to-gray-900 rounded-3xl border-2 border-purple-500/50 shadow-2xl overflow-hidden">
               {/* Glow effect */}
