@@ -14,6 +14,7 @@ import { MessageBubble } from "./MessageBubble";
 import { QRCodeModal } from "./QRCodeModal";
 import { ShareQRButton } from "./ShareQRButton";
 import { WelcomeHint } from "./WelcomeHint";
+import { GoalReachedPopup } from "./GoalReachedPopup";
 import { NumberData } from "../types";
 import {
   generateMockNumbers,
@@ -136,6 +137,9 @@ export function BingoGame() {
       gridPosition: { row: number; col: number };
     }>
   >([]);
+
+  // Calculate total raised from sold numbers
+  const totalRaised = numbers.filter((n) => n.status === "sold").length * CONFIG.pricePerNumber;
 
   const handleSelectNumber = (number: number) => {
     setSelectedNumbers((prev) => {
@@ -388,6 +392,9 @@ export function BingoGame() {
         drawDate={CONFIG.prizeDrawPopup.date}
         drawTime={CONFIG.prizeDrawPopup.time}
       />
+
+      {/* Goal Reached Popup */}
+      <GoalReachedPopup totalRaised={totalRaised} goalAmount={250} />
 
       {/* Confetti Container */}
       
