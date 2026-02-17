@@ -311,7 +311,7 @@ export function BingoGame() {
       />
 
       {/* Goal Reached Popup */}
-      <GoalReachedPopup totalRaised={totalRaised} goalAmount={250} />
+      <GoalReachedPopup totalRaised={totalRaised} goalAmount={1000} />
 
       {/* Confetti Container */}
       

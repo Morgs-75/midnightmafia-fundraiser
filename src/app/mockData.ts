@@ -1,11 +1,11 @@
 import { NumberData, SupporterEntry } from "../types";
 
-// Generate 100 numbers with various states
+// Generate 200 numbers with various states
 export const generateMockNumbers = (): NumberData[] => {
   const numbers: NumberData[] = [];
-  
+
   // Randomly select 10 numbers for the team (house numbers)
-  const allNumbers = Array.from({ length: 100 }, (_, i) => i + 1);
+  const allNumbers = Array.from({ length: 200 }, (_, i) => i + 1);
   const shuffled = allNumbers.sort(() => Math.random() - 0.5);
   const teamNumbers = shuffled.slice(0, 10);
   
@@ -26,7 +26,7 @@ export const generateMockNumbers = (): NumberData[] => {
   // Held numbers (excluding team numbers)
   const heldNumbers = [5, 12, 23, 34, 45, 56, 67, 78, 89, 90].filter(n => !teamNumbers.includes(n));
   
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 1; i <= 200; i++) {
     const isTeam = teamNumbers.includes(i);
     const sold = soldNumbers.find(s => s.number === i);
     const isHeld = heldNumbers.includes(i);
