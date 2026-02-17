@@ -5,10 +5,6 @@ import { BingoGame } from "./components/BingoGame";
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: LandingPage,
-  },
-  {
-    path: "/bingo",
     Component: BingoGame,
   },
 ]);

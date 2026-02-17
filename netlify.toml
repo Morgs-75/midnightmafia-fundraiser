@@ -23,3 +23,9 @@
 # Scheduled function to release expired holds
 # [functions.release-expired-holds]
 #   schedule = "*/2 * * * *"
+
+# Redirects
+[[redirects]]
+  from = "/bingo"
+  to = "/"
+  status = 301
