@@ -221,8 +221,40 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <script>
     let qrCodeInstance = null;
+
+    // 🎉 Confetti celebration on page load
+    function celebrate() {
+      const duration = 3000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        // Launch confetti from left and right
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ff4fd8', '#7c3cff', '#f6d77a']
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ff4fd8', '#7c3cff', '#f6d77a']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+
+    // Trigger celebration when page loads
+    window.addEventListener('load', celebrate);
 
     async function shareToInstagram() {
       const shareText = "I just supported Midnight Mafia Cheer on their journey to Worlds 2026! 💜⭐ Help them reach their goal!";
