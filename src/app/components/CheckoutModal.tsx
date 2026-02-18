@@ -108,11 +108,13 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
         });
 
         if (!promoRes.ok) {
-          const error = await promoRes.json();
+          const errorText = await promoRes.text();
+          let errorMsg = '';
+          try { errorMsg = JSON.parse(errorText).error || ''; } catch {}
           if (promoRes.status === 409) {
-            throw new Error(error.error || 'One or more of your selected numbers were just taken. Please refresh and try again.');
+            throw new Error(errorMsg || 'One or more of your selected numbers were just taken. Please refresh and try again.');
           }
-          throw new Error(error.error || 'Failed to process promo code. Please try again.');
+          throw new Error(errorMsg || 'Failed to process promo code. Please try again.');
         }
 
         // Success! Reload to show updated board

@@ -54,7 +54,7 @@ export async function handler(event) {
     .eq('board_id', boardId);
 
   if (existing.some(n => n.status !== 'available')) {
-    return { statusCode: 409, body: 'One or more numbers unavailable' };
+    return { statusCode: 409, body: JSON.stringify({ error: 'One or more numbers unavailable' }) };
   }
 
   // Create hold
