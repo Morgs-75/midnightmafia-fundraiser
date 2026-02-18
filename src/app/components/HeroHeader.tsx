@@ -63,7 +63,7 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
               🏆 GRAND PRIZE 🏆
             </div>
             <div className="text-5xl md:text-7xl font-black text-yellow-900 tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif', textShadow: '2px 2px 0px rgba(0,0,0,0.1)', fontWeight: 900, letterSpacing: '1px' }}>
-              WIN $250
+              WIN $500
             </div>
             <div className="text-xs md:text-sm text-yellow-900 font-bold mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
               ⚡ ONE LUCKY NUMBER TAKES ALL ⚡
@@ -86,7 +86,7 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
         
         <h1 className="text-6xl md:text-7xl mb-4 tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 900, letterSpacing: '1px' }}>
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200">
-            Midnight Mafia Bingo!
+            Midnight Mafia Fundraiser!
           </span>
         </h1>
         
@@ -99,8 +99,8 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
           <h3 className="text-2xl md:text-3xl text-yellow-400 mb-4 font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700, letterSpacing: '0.5px' }}>
             💰 Pricing 💰
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-            {/* Individual */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto text-center">
+            {/* Single */}
             <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-4 border border-purple-500/30">
               <p className="text-white text-lg font-extrabold mb-1 uppercase tracking-wide" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800 }}>
                 Single Number
@@ -113,36 +113,22 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
               </p>
             </div>
 
-            {/* Best Deal - 5 Numbers */}
+            {/* Best Deal - 5 for $100 */}
             <motion.div
               className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-xl p-4 pt-6 border-2 border-green-400/50 relative"
-              animate={{
-                rotate: [0, -2, 2, -2, 2, 0],
-                scale: [1, 1.05, 1, 1.05, 1],
-              }}
-              transition={{
-                duration: 0.8,
-                repeat: Infinity,
-                repeatDelay: 2,
-                ease: "easeInOut"
-              }}
+              animate={{ rotate: [0, -2, 2, -2, 2, 0], scale: [1, 1.05, 1, 1.05, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
             >
               <motion.div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg"
                 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700 }}
-                animate={{
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 0.5,
-                  repeat: Infinity,
-                  repeatDelay: 2,
-                }}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
               >
-                MOST POPULAR
+                BEST VALUE
               </motion.div>
               <p className="text-white text-lg font-extrabold mb-1 uppercase tracking-wide" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800 }}>
-                5 Numbers (1 Free)
+                5 Numbers
               </p>
               <p className="text-yellow-400 text-4xl font-black" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900 }}>
                 $100
@@ -151,22 +137,9 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
                 Save $25! (Regular $125)
               </p>
             </motion.div>
-
-            {/* 10 Numbers */}
-            <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-4 border border-purple-500/30">
-              <p className="text-white text-lg font-extrabold mb-1 uppercase tracking-wide" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800 }}>
-                10 Numbers (3 Free)
-              </p>
-              <p className="text-yellow-400 text-4xl font-black" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900 }}>
-                $175
-              </p>
-              <p className="text-gray-300 text-sm mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                Save $75! (Regular $250)
-              </p>
-            </div>
           </div>
           <p className="text-center text-yellow-300 text-sm mt-4 font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            ⚡ More numbers = Better odds of winning $250! 
+            ⚡ More numbers = Better odds of winning $500!
           </p>
         </div>
         

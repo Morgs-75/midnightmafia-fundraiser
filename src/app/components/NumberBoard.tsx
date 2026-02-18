@@ -80,7 +80,7 @@ export function NumberBoard({ numbers, selectedNumbers, onSelectNumber }: Number
       <div className="relative max-w-4xl mx-auto">
         <div
           className="grid grid-cols-5 md:grid-cols-10 gap-0"
-          style={{ overflow: "visible", backgroundColor: "#1f1f2e" }}
+          style={{ overflow: "visible", backgroundColor: "#05050f" }}
           data-number-board
         >
           {numbers.map((numberData, idx) => {

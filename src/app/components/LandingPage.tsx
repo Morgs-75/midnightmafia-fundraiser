@@ -97,7 +97,7 @@ export function LandingPage() {
             className="text-5xl md:text-7xl mb-4 text-yellow-400 leading-tight"
             style={{ fontFamily: "Bebas Neue, sans-serif" }}
           >
-            Welcome to<br />Midnight Mafia Bingo
+            Welcome to<br />Midnight Mafia Fundraiser
           </motion.h1>
           
           <motion.p
@@ -120,7 +120,7 @@ export function LandingPage() {
             <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-xl p-4 border border-purple-500/30 backdrop-blur-sm">
               <Trophy className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
               <p className="text-sm text-purple-200" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <span className="font-bold text-yellow-400 text-lg">$250</span><br />
+                <span className="font-bold text-yellow-400 text-lg">$500</span><br />
                 Grand Prize
               </p>
             </div>
@@ -136,7 +136,7 @@ export function LandingPage() {
             <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-xl p-4 border border-purple-500/30 backdrop-blur-sm">
               <Sparkles className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
               <p className="text-sm text-purple-200" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <span className="font-bold text-yellow-400 text-lg">10 for $175</span><br />
+                <span className="font-bold text-yellow-400 text-lg">5 for $100</span><br />
                 Best Deal
               </p>
             </div>

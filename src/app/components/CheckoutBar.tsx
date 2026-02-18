@@ -8,45 +8,11 @@ interface CheckoutBarProps {
   onClearSelection: () => void;
 }
 
-// Helper to calculate price with bulk deal
-// Buy 4 for $100, get the 5th FREE
-// Special deal: 10 numbers = $175
-// Once you have 5 numbers, you can get 6 more for $100 each package (11 = $200)
+// $25 per number; 5 for $100 (save $25); 6+: $100 + $25 each above 5
 const calculatePrice = (count: number, pricePerNumber: number) => {
   if (count === 0) return 0;
-  
-  // First tier: 1-4 numbers at $25 each
-  if (count <= 4) {
-    return count * pricePerNumber;
-  }
-  
-  // First package: 5 numbers for $100 (buy 4, get 1 free)
-  if (count === 5) {
-    return 100;
-  }
-  
-  // 6-9 numbers: $100 for first 5, then $25 each for remainder
-  if (count >= 6 && count <= 9) {
-    return 100 + ((count - 5) * pricePerNumber);
-  }
-  
-  // Special deal: 10 numbers = $175
-  if (count === 10) {
-    return 175;
-  }
-  
-  // After 10 numbers, calculate based on packages
-  // 11 numbers = $200 (5 + 6 for $100 each)
-  // count = 5 + additional
-  // First 5 = $100, then packages of 6 for $100 each
-  const additional = count - 5;
-  const additionalPackages = Math.floor(additional / 6);
-  const remainder = additional % 6;
-  
-  // Base: $100 for first 5 numbers
-  // Additional complete packages: additionalPackages * $100
-  // Remainder numbers: remainder * $25 each
-  return 100 + (additionalPackages * 100) + (remainder * pricePerNumber);
+  if (count <= 4) return count * pricePerNumber;
+  return 100 + ((count - 5) * pricePerNumber);
 };
 
 // Calculate Stripe fees (1.75% + $0.30 AUD)

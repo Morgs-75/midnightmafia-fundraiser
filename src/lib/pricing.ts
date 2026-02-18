@@ -3,51 +3,27 @@
  *
  * Pricing structure:
  * - $25 per number
- * - Buy 4, get 1 FREE (5 for $100)
- * - Every 6 numbers = $100 (buy 5, get 1 free per package)
- * - Special: 10 numbers = $175
+ * - 5 for $100 (save $25)
+ * - 6+: $100 for first 5, then $25 each
  */
 
 export const PRICE_PER_NUMBER = 25;
 
 /**
- * Calculate price with bulk deals
+ * Calculate price with bulk deal
  * @param count Number of tickets being purchased
  * @returns Subtotal before payment processing fees
  */
 export function calculatePrice(count: number): number {
   if (count === 0) return 0;
 
-  // First tier: 1-4 numbers at $25 each
+  // 1-4 numbers: $25 each
   if (count <= 4) {
     return count * PRICE_PER_NUMBER;
   }
 
-  // First package: 5 numbers for $100 (buy 4, get 1 free)
-  if (count === 5) {
-    return 100;
-  }
-
-  // 6-9 numbers: $100 for first 5, then $25 each for remainder
-  if (count >= 6 && count <= 9) {
-    return 100 + ((count - 5) * PRICE_PER_NUMBER);
-  }
-
-  // Special deal: 10 numbers = $175
-  if (count === 10) {
-    return 175;
-  }
-
-  // After 10 numbers, calculate based on packages
-  // First 5 = $100, then packages of 6 for $100 each
-  const additional = count - 5;
-  const additionalPackages = Math.floor(additional / 6);
-  const remainder = additional % 6;
-
-  // Base: $100 for first 5 numbers
-  // Additional complete packages: additionalPackages * $100
-  // Remainder numbers: remainder * $25 each
-  return 100 + (additionalPackages * 100) + (remainder * PRICE_PER_NUMBER);
+  // 5+ numbers: $100 for first 5, then $25 each
+  return 100 + ((count - 5) * PRICE_PER_NUMBER);
 }
 
 /**
@@ -64,8 +40,8 @@ export function calculateTotal(count: number): {
   const subtotal = calculatePrice(count);
   const savings = regularPrice - subtotal;
 
-  // Calculate free numbers: 1 free per complete package of 6
-  const freeNumbers = Math.floor(count / 6);
+  // 1 number free when buying 5 (saves $25)
+  const freeNumbers = count >= 5 ? 1 : 0;
 
   return {
     total: subtotal,

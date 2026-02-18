@@ -13,82 +13,18 @@ interface UpsellModalProps {
 export function UpsellModal({ isOpen, selectedNumbers, pricePerNumber, onClose, onAccept, onDecline }: UpsellModalProps) {
   const currentCount = selectedNumbers.length;
 
-  // Pricing per pricing.csv:
-  // 2 numbers ($50): Upgrade to 5 for $100 (add 3 for $50)
-  // 3 numbers ($75): Upgrade to 5 for $100 (add 2 for $25)
-  // 4 numbers ($100): Upgrade to 5 for $100 (add 1 for $0)
-  // 6 numbers ($125): Upgrade to 10 for $175 (add 4 for $50)
-  // 7 numbers ($150): Upgrade to 10 for $175 (add 3 for $25)
-  // 8 numbers ($175): Get 2 EXTRA NUMBERS FREE
-  // 9 numbers ($200): Get 2 EXTRA NUMBERS FREE
+  // Pricing: $25 each, or 5 for $100 (save $25)
+  // Upsell only shown for 2–4 numbers: upgrade to 5 for $100
 
-  let numbersToAdd = 0;
-  let newTotal = 0;
-  let currentPrice = 0;
-  let dealPrice = 0;
-  let additionalCost = 0;
-  let isBonus = false;
-  let upsellMessage = "";
-
-  if (currentCount === 2) {
-    numbersToAdd = 3;
-    newTotal = 5;
-    currentPrice = 50;
-    dealPrice = 100;
-    additionalCost = 50;
-    upsellMessage = "Upgrade to 5 for $100";
-  } else if (currentCount === 3) {
-    numbersToAdd = 2;
-    newTotal = 5;
-    currentPrice = 75;
-    dealPrice = 100;
-    additionalCost = 25;
-    upsellMessage = "Upgrade to 5 for $100";
-  } else if (currentCount === 4) {
-    numbersToAdd = 1;
-    newTotal = 5;
-    currentPrice = 100;
-    dealPrice = 100;
-    additionalCost = 0;
-    upsellMessage = "Upgrade to 5 for $100";
-  } else if (currentCount === 6) {
-    numbersToAdd = 4;
-    newTotal = 10;
-    currentPrice = 125;
-    dealPrice = 175;
-    additionalCost = 50;
-    upsellMessage = "Upgrade to 10 for $175 and get 4 more numbers for an extra $50";
-  } else if (currentCount === 7) {
-    numbersToAdd = 3;
-    newTotal = 10;
-    currentPrice = 150;
-    dealPrice = 175;
-    additionalCost = 25;
-    upsellMessage = "Upgrade to 10 for $175 and get 3 more numbers for an extra $25";
-  } else if (currentCount === 8) {
-    numbersToAdd = 2;
-    newTotal = 10;
-    currentPrice = 175;
-    dealPrice = 175;
-    additionalCost = 0;
-    isBonus = true;
-    upsellMessage = "You can claim a BONUS and get 2 EXTRA NUMBERS FREE!";
-  } else if (currentCount === 9) {
-    numbersToAdd = 1;
-    newTotal = 10;
-    currentPrice = 200;
-    dealPrice = 175; // 10 numbers special price
-    additionalCost = 0; // Actually saves $25!
-    isBonus = true;
-    upsellMessage = "You have a bonus you need to claim!";
-  } else {
-    // Default
-    numbersToAdd = 1;
-    newTotal = currentCount + 1;
-    currentPrice = currentCount * 25;
-    dealPrice = currentPrice + 25;
-    additionalCost = 25;
-  }
+  const numbersToAdd = 5 - currentCount;
+  const newTotal = 5;
+  const currentPrice = currentCount * 25;
+  const dealPrice = 100;
+  const additionalCost = 100 - currentPrice;
+  const isBonus = additionalCost === 0;
+  const upsellMessage = additionalCost === 0
+    ? "Add 1 more number for FREE and get 5 for $100!"
+    : `Upgrade to 5 for $100 — add ${numbersToAdd} more for only $${additionalCost}!`;
 
   const regularPrice = newTotal * pricePerNumber;
   const savings = regularPrice - dealPrice;

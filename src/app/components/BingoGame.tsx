@@ -154,8 +154,8 @@ export function BingoGame() {
 
   const handleCheckout = () => {
     const count = selectedNumbers.length;
-    // Show upsell for 2-4, 6-7, or 8-9 numbers (per pricing.csv)
-    if ((count >= 2 && count <= 4) || (count >= 6 && count <= 7) || (count === 8 || count === 9)) {
+    // Show upsell for 2-4 numbers: offer upgrade to 5 for $100
+    if (count >= 2 && count <= 4) {
       setIsUpsellOpen(true);
     } else {
       setIsCheckoutOpen(true);
@@ -175,17 +175,9 @@ export function BingoGame() {
 
     let numbersToAdd = 0;
 
-    // 2-4 numbers: Upgrade to 5 total
+    // 2-4 numbers: Upgrade to 5 for $100
     if (count >= 2 && count <= 4) {
       numbersToAdd = 5 - count;
-    }
-    // 6-7 numbers: Upgrade to 10 total
-    else if (count === 6 || count === 7) {
-      numbersToAdd = 10 - count;
-    }
-    // 8-9 numbers: Add bonus numbers to reach 10
-    else if (count === 8 || count === 9) {
-      numbersToAdd = 10 - count; // 8 gets 2, 9 gets 1
     }
 
     const additionalNumbers = availableNumbers.slice(0, numbersToAdd);
@@ -237,8 +229,8 @@ export function BingoGame() {
       .map((n) => n.number);
 
     if (popupType === "flash" || popupType === "bonus") {
-      // For flash/bonus deal: auto-select 10 numbers for $175
-      const numbersToSelect = availableNumbers.slice(0, 10);
+      // For flash/bonus deal: auto-select 5 numbers for $100
+      const numbersToSelect = availableNumbers.slice(0, 5);
       setSelectedNumbers(numbersToSelect);
       setIsCheckoutOpen(true);
     } else if (popupType === "alert") {

@@ -35,7 +35,7 @@ export function QRCodeModal({ isOpen, onClose, url }: QRCodeModalProps) {
       const pngFile = canvas.toDataURL("image/png");
 
       const downloadLink = document.createElement("a");
-      downloadLink.download = "midnight-mafia-bingo-qr.png";
+      downloadLink.download = "midnight-mafia-fundraiser-qr.png";
       downloadLink.href = pngFile;
       downloadLink.click();
     };
