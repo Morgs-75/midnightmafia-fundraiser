@@ -10,19 +10,14 @@ interface Stat {
 }
 
 interface PulsatingStatsProps {
-  numbers: Array<{ status: string, isTeamNumber?: boolean }>;
+  numbers: Array<{ status: string }>;
 }
 
 export function PulsatingStats({ numbers }: PulsatingStatsProps) {
-  // Calculate real stats from actual data
   const totalSoldCount = numbers.filter(n => n.status === "sold").length;
-  const supporterSoldCount = numbers.filter(n => n.status === "sold" && !n.isTeamNumber).length;
   const soldPercentage = Math.round((totalSoldCount / 200) * 100);
   const numbersLeft = 200 - totalSoldCount;
-  
-  // Calculate revenue: Only count supporter numbers (exclude team's 10 free numbers)
-  // Revenue = supporterSoldCount * $25 (average price per number)
-  const revenue = supporterSoldCount * 25;
+  const revenue = totalSoldCount * 25;
 
   const stats: Stat[] = [
     {

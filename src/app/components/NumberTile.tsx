@@ -20,7 +20,6 @@ const COLORS = {
   selected:  { gradTop: "#7c3aed", gradBot: "#2e1065", stroke: "#a855f7", glowRgb: "168,85,247",  text: "#ffffff" },
   sold:      { gradTop: "#9d174d", gradBot: "#200010", stroke: "#f9a8d4", glowRgb: "249,168,212", text: "#fce7f3" },
   held:      { gradTop: "#1f2937", gradBot: "#080c12", stroke: "#374151", glowRgb: null,           text: "#4b5563" },
-  team:      { gradTop: "#1e40af", gradBot: "#060e2a", stroke: "#93c5fd", glowRgb: "147,197,253", text: "#dbeafe" },
 };
 
 export function NumberTile({
@@ -34,7 +33,7 @@ export function NumberTile({
   totalCols = 10,
   totalRows = 20,
 }: NumberTileProps) {
-  const { number, status, displayName, isTeamNumber } = data;
+  const { number, status, displayName } = data;
 
   const [timeOnPage, setTimeOnPage] = useState(0);
   useEffect(() => {
@@ -46,10 +45,9 @@ export function NumberTile({
   const isSold      = status === "sold";
   const isHeld      = status === "held";
 
-  const scheme = isTeamNumber ? COLORS.team
-    : isSold      ? COLORS.sold
-    : isHeld      ? COLORS.held
-    : isSelected  ? COLORS.selected
+  const scheme = isSold     ? COLORS.sold
+    : isHeld    ? COLORS.held
+    : isSelected ? COLORS.selected
     : COLORS.available;
 
   // Glow grows more urgent over time
@@ -142,10 +140,6 @@ export function NumberTile({
               {number}
             </text>
 
-            {/* Team star */}
-            {isTeamNumber && (
-              <text x="50" y="72" textAnchor="middle" fontSize="12">⭐</text>
-            )}
           </svg>
         </div>
 

@@ -5,7 +5,7 @@ export interface NumberData {
   status: NumberStatus;
   displayName?: string;
   message?: string;
-  isTeamNumber?: boolean; // Team's free numbers for the chance to win
+
 }
 
 export interface SupporterEntry {

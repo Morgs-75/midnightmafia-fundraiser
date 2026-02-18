@@ -24,7 +24,6 @@ export function useNumbers() {
         status: n.status as 'available' | 'held' | 'sold',
         displayName: n.display_name || undefined,
         message: n.message || undefined,
-        isTeamNumber: n.promo_code === 'OUTLAWS', // Team numbers have OUTLAWS promo code
       }));
 
       setNumbers(transformedNumbers);

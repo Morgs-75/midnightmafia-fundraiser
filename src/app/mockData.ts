@@ -4,12 +4,6 @@ import { NumberData, SupporterEntry } from "../types";
 export const generateMockNumbers = (): NumberData[] => {
   const numbers: NumberData[] = [];
 
-  // Randomly select 10 numbers for the team (house numbers)
-  const allNumbers = Array.from({ length: 200 }, (_, i) => i + 1);
-  const shuffled = allNumbers.sort(() => Math.random() - 0.5);
-  const teamNumbers = shuffled.slice(0, 10);
-  
-  // Sample sold numbers with names (excluding team numbers)
   const soldNumbers = [
     { number: 7, name: "Sarah M.", message: "Go Midnight Mafia! 💪" },
     { number: 13, name: "Coach Lisa", message: "Bring it home team!" },
@@ -21,26 +15,15 @@ export const generateMockNumbers = (): NumberData[] => {
     { number: 77, name: "Former Coach", message: "You got this!" },
     { number: 88, name: "Local Gym", message: "Community proud!" },
     { number: 99, name: "Anonymous", message: "Good luck at Worlds!" },
-  ].filter(s => !teamNumbers.includes(s.number)); // Exclude team numbers from sold
-  
-  // Held numbers (excluding team numbers)
-  const heldNumbers = [5, 12, 23, 34, 45, 56, 67, 78, 89, 90].filter(n => !teamNumbers.includes(n));
-  
+  ];
+
+  const heldNumbers = [5, 12, 23, 34, 45, 56, 67, 78, 89, 90];
+
   for (let i = 1; i <= 200; i++) {
-    const isTeam = teamNumbers.includes(i);
     const sold = soldNumbers.find(s => s.number === i);
     const isHeld = heldNumbers.includes(i);
-    
-    if (isTeam) {
-      // Team's free numbers
-      numbers.push({
-        number: i,
-        status: "sold",
-        displayName: "Midnight Mafia",
-        message: "Team entry - Chance to keep ALL numbers! 🎯",
-        isTeamNumber: true,
-      });
-    } else if (sold) {
+
+    if (sold) {
       numbers.push({
         number: i,
         status: "sold",
