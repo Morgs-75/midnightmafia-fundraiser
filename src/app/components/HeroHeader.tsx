@@ -66,14 +66,21 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
             animation: ticker 80s linear infinite;
             white-space: nowrap;
           }
+          @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(250,204,21,0.9), 0 0 30px rgba(250,204,21,0.6), 0 0 60px rgba(250,204,21,0.3); }
+            50%       { text-shadow: 0 0 20px rgba(250,204,21,1),   0 0 60px rgba(250,204,21,0.9), 0 0 120px rgba(250,204,21,0.6); }
+          }
+          .ticker-text {
+            animation: glow-pulse 2s ease-in-out infinite;
+          }
         `}</style>
         <div className="w-full overflow-hidden bg-black border-y-4 border-yellow-400 py-4 mb-6">
           <div className="ticker-inner">
             {Array(20).fill(null).map((_, i) => (
               <span
                 key={i}
-                className="mx-16 text-yellow-400 text-7xl font-black"
-                style={{ fontFamily: 'Bebas Neue, sans-serif', textShadow: '0 0 10px rgba(250,204,21,0.9), 0 0 30px rgba(250,204,21,0.6), 0 0 60px rgba(250,204,21,0.3)' }}
+                className="ticker-text mx-16 text-yellow-400 text-7xl font-black"
+                style={{ fontFamily: 'Bebas Neue, sans-serif' }}
               >
                 🏆 WIN $500
               </span>
