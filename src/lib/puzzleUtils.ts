@@ -24,9 +24,9 @@ export function getPuzzlePath(
   cols: number,
   rows: number
 ): string {
-  const D = 20; // tab depth beyond 0-100 boundary
-  const S = 30; // tab start along edge
-  const E = 70; // tab end along edge
+  const D = 30; // tab depth beyond 0-100 boundary (bezier peak ≈ 22.5 units)
+  const S = 22; // tab start along edge (wider tab = 56% of edge)
+  const E = 78; // tab end along edge
 
   // Derive each edge: null=flat, true=tab(out), false=blank(in)
   const top    = row === 0      ? null : !tabMap.bottomTab[row - 1][col];

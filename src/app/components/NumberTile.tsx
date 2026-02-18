@@ -68,9 +68,9 @@ export function NumberTile({
   const getFrontStroke = () => {
     if (isTeamNumber) return "#a855f7";
     if (isSold) return "#ec4899";
-    if (isHeld) return "#ec4899";
+    if (isHeld) return "#db2777";
     if (isSelected) return "#a855f7";
-    return "#374151";
+    return "#6d28d9";
   };
 
   const getNumberColor = () => {
@@ -123,7 +123,7 @@ export function NumberTile({
                 d={path}
                 fill={getFrontFill()}
                 stroke={getFrontStroke()}
-                strokeWidth="1.5"
+                strokeWidth="2"
                 animate={{
                   filter: [
                     "drop-shadow(0 0 0px rgba(168,85,247,0))",
@@ -146,7 +146,7 @@ export function NumberTile({
                 d={path}
                 fill={getFrontFill()}
                 stroke={getFrontStroke()}
-                strokeWidth="1.5"
+                strokeWidth="2"
                 opacity={isHeld ? 0.6 : 1}
               />
             )}
