@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import { NumberData } from "../types";
-import { Sparkles, Crown } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface NumberTileProps {
@@ -8,11 +7,25 @@ interface NumberTileProps {
   isSelected: boolean;
   onSelect: (number: number) => void;
   onViewMessage?: (data: NumberData) => void;
+  col: number;
+  row: number;
+  path: string;
+  totalCols?: number;
+  totalRows?: number;
 }
 
-export function NumberTile({ data, isSelected, onSelect, onViewMessage }: NumberTileProps) {
+export function NumberTile({
+  data,
+  isSelected,
+  onSelect,
+  onViewMessage,
+  col,
+  row,
+  path,
+  totalCols = 10,
+  totalRows = 20,
+}: NumberTileProps) {
   const { number, status, displayName, isTeamNumber } = data;
-  // Force cache bust - updated colors to pink/purple
 
   // Track time on page to increase pulse urgency
   const [timeOnPage, setTimeOnPage] = useState(0);
@@ -20,41 +33,20 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeOnPage(prev => prev + 1);
-    }, 10000); // Update every 10 seconds
-
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
   // Random delay for pulsing animation (0-5 seconds)
-  const pulseDelay = Math.random() * 5;
+  const pulseDelay = (number * 1.618) % 5;
 
   // Calculate pulse parameters based on time on page
-  // Starts at 3s delay, reduces to 0.5s after 2 minutes
-  const repeatDelay = Math.max(0.5, 3 - (timeOnPage * 0.2));
-  // Increase glow intensity over time
-  const glowIntensity = Math.min(0.7, 0.4 + (timeOnPage * 0.025));
-
-  const getStatusStyles = () => {
-    if (isTeamNumber) {
-      // Team numbers get special purple/black mafia styling
-      return "bg-gradient-to-br from-purple-700/40 to-black border-2 border-purple-400 shadow-lg shadow-purple-500/40";
-    }
-    
-    switch (status) {
-      case "sold":
-        return "bg-gradient-to-br from-pink-600/30 to-purple-700/30 border-2 border-pink-500 shadow-lg shadow-pink-500/30";
-      case "held":
-        return "bg-gray-800/60 border-2 border-pink-500/40 opacity-50";
-      case "available":
-      default:
-        return isSelected
-          ? "bg-gradient-to-br from-purple-600/40 to-pink-600/40 border-2 border-purple-400"
-          : "bg-gray-900/80 border-2 border-gray-700 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20";
-    }
-  };
+  const repeatDelay = Math.max(0.5, 3 - timeOnPage * 0.2);
+  const glowIntensity = Math.min(0.7, 0.4 + timeOnPage * 0.025);
 
   const isClickable = status === "available";
   const isSold = status === "sold";
+  const isHeld = status === "held";
 
   const handleClick = () => {
     if (isClickable) {
@@ -64,94 +56,184 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
     }
   };
 
+  // Status fill/stroke for the front face SVG path
+  const getFrontFill = () => {
+    if (isTeamNumber) return "#1a0a2e";
+    if (isSold) return "#1e0a2e";
+    if (isHeld) return "#1a1a1a";
+    if (isSelected) return "rgba(126, 34, 206, 0.4)";
+    return "#1f1f2e";
+  };
+
+  const getFrontStroke = () => {
+    if (isTeamNumber) return "#a855f7";
+    if (isSold) return "#ec4899";
+    if (isHeld) return "#ec4899";
+    if (isSelected) return "#a855f7";
+    return "#374151";
+  };
+
+  const getNumberColor = () => {
+    if (isTeamNumber) return "#c084fc";
+    if (isSold) return "#f9a8d4";
+    if (isHeld) return "#6b7280";
+    if (isSelected) return "#ffffff";
+    return "#d1d5db";
+  };
+
+  // z-index so sold tiles (with tabs) sit above neighbours
+  const zIndex = isSold ? 3 : isHeld ? 2 : 1;
+
   return (
-    <motion.button
+    <div
+      style={{ perspective: "600px", overflow: "visible", zIndex }}
+      className="aspect-square relative"
       onClick={handleClick}
-      className={`relative aspect-square rounded-lg transition-all duration-200 overflow-hidden ${getStatusStyles()} ${
-        isSold ? 'cursor-pointer hover:scale-105' : ''
-      }`}
-      style={
-        isSold
-          ? {
-              backgroundImage: 'url(/Jemma.JPG)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }
-          : {}
-      }
-      animate={
-        isClickable && !isSelected
-          ? {
-              scale: [1, 1.05, 1],
-              boxShadow: [
-                "0 0 0 0 rgba(168, 85, 247, 0)",
-                `0 0 20px 5px rgba(168, 85, 247, ${glowIntensity})`,
-                "0 0 0 0 rgba(168, 85, 247, 0)"
-              ]
-            }
-          : {}
-      }
-      transition={
-        isClickable && !isSelected
-          ? {
-              duration: 2,
-              repeat: Infinity,
-              delay: pulseDelay,
-              repeatDelay: repeatDelay
-            }
-          : isSold
-          ? { rotate: { duration: 0.6 } }
-          : {}
-      }
-      whileHover={isClickable ? { scale: 1.05 } : isSold ? { scale: 1.05 } : {}}
-      whileTap={
-        isClickable
-          ? { scale: 0.95 }
-          : isSold
-          ? { scale: 0.95, rotate: 360 }
-          : {}
-      }
     >
-      {/* Dark overlay to ensure text visibility - only on sold numbers with photo */}
-      {isSold && (
-        <div className="absolute inset-0 bg-black/50 rounded-lg"></div>
-      )}
-
-      {/* Sparkle for regular sold numbers */}
-      {status === "sold" && !isTeamNumber && (
-        <div className="absolute -top-1 -right-1 z-10">
-          <Sparkles className="w-4 h-4 text-pink-400" />
-        </div>
-      )}
-
-      <div className="relative z-10 flex flex-col items-center justify-center h-full p-2">
-        <span
-          className={`text-2xl md:text-3xl ${
-            isTeamNumber
-              ? "text-purple-300"
-              : status === "sold"
-              ? "text-pink-400"
-              : status === "held"
-              ? "text-gray-500"
-              : isSelected
-              ? "text-white"
-              : "text-gray-300"
-          }`}
-          style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+      <motion.div
+        animate={{ rotateY: isSold ? 180 : 0 }}
+        transition={{ duration: 0.7, ease: "easeInOut" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          transformStyle: "preserve-3d",
+          overflow: "visible",
+        }}
+      >
+        {/* ── FRONT FACE ── */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            overflow: "visible",
+          }}
         >
-          {number}
-        </span>
+          <svg
+            viewBox="-25 -25 150 150"
+            width="100%"
+            height="100%"
+            style={{ overflow: "visible", display: "block" }}
+          >
+            {/* Animated pulse for available tiles */}
+            {isClickable && !isSelected && (
+              <motion.path
+                d={path}
+                fill={getFrontFill()}
+                stroke={getFrontStroke()}
+                strokeWidth="1.5"
+                animate={{
+                  filter: [
+                    "drop-shadow(0 0 0px rgba(168,85,247,0))",
+                    `drop-shadow(0 0 8px rgba(168,85,247,${glowIntensity}))`,
+                    "drop-shadow(0 0 0px rgba(168,85,247,0))",
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: pulseDelay,
+                  repeatDelay,
+                }}
+              />
+            )}
 
-        {status === "sold" && isTeamNumber && (
-          <span className="text-base mt-1">⭐</span>
-        )}
+            {/* Non-animated front path (held, selected, team) */}
+            {(!isClickable || isSelected) && (
+              <path
+                d={path}
+                fill={getFrontFill()}
+                stroke={getFrontStroke()}
+                strokeWidth="1.5"
+                opacity={isHeld ? 0.6 : 1}
+              />
+            )}
 
-        {status === "sold" && !isTeamNumber && displayName && (
-          <span className="text-xs mt-1 truncate max-w-full px-1 text-pink-300/80" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            {displayName}
-          </span>
-        )}
-      </div>
-    </motion.button>
+            {/* Number text */}
+            <text
+              x="50"
+              y="50"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={getNumberColor()}
+              fontSize="22"
+              style={{ fontFamily: "Bebas Neue, sans-serif" }}
+            >
+              {number}
+            </text>
+
+            {/* Team star */}
+            {isTeamNumber && (
+              <text x="50" y="72" textAnchor="middle" fontSize="12">
+                ⭐
+              </text>
+            )}
+          </svg>
+        </div>
+
+        {/* ── BACK FACE ── */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            overflow: "visible",
+          }}
+        >
+          <svg
+            viewBox="-25 -25 150 150"
+            width="100%"
+            height="100%"
+            style={{ overflow: "visible", display: "block" }}
+          >
+            <defs>
+              <clipPath
+                id={`back-clip-${number}`}
+                clipPathUnits="userSpaceOnUse"
+              >
+                <path d={path} />
+              </clipPath>
+            </defs>
+
+            {/* Logo slice — desktop only.
+                CSS rotateY(180deg) flips the X axis, so we pre-correct:
+                col=0 → x offset = -(totalCols-1)*100  (shows right edge of image → after flip = left = correct)
+                col=9 → x offset = 0                   (shows left edge of image → after flip = right = correct) */}
+            <g clipPath={`url(#back-clip-${number})`}>
+              <image
+                href="/assets/logo.png"
+                x={(col - (totalCols - 1)) * 100}
+                y={-row * 100}
+                width={totalCols * 100}
+                height={totalRows * 100}
+                preserveAspectRatio="none"
+              />
+            </g>
+
+            {/* Dark overlay */}
+            <path d={path} fill="rgba(0,0,0,0.35)" />
+
+            {/* Buyer name */}
+            {displayName && (
+              <text
+                x="50"
+                y="58"
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="white"
+                fontSize="9"
+                style={{ fontFamily: "Poppins, sans-serif" }}
+              >
+                {displayName}
+              </text>
+            )}
+          </svg>
+        </div>
+      </motion.div>
+    </div>
   );
 }
