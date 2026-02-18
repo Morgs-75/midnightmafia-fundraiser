@@ -67,12 +67,12 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
             white-space: nowrap;
           }
         `}</style>
-        <div className="w-full overflow-hidden bg-black border-y-2 border-yellow-400 py-3 mb-6">
+        <div className="w-full overflow-hidden bg-black border-y-4 border-yellow-400 py-4 mb-6">
           <div className="ticker-inner">
             {Array(20).fill(null).map((_, i) => (
               <span
                 key={i}
-                className="mx-12 text-yellow-400 text-4xl font-black"
+                className="mx-16 text-yellow-400 text-7xl font-black"
                 style={{ fontFamily: 'Bebas Neue, sans-serif' }}
               >
                 🏆 WIN $500
