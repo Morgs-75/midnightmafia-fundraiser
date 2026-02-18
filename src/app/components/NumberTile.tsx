@@ -112,7 +112,7 @@ export function NumberTile({
           }}
         >
           <svg
-            viewBox="-25 -25 150 150"
+            viewBox="0 0 100 100"
             width="100%"
             height="100%"
             style={{ overflow: "visible", display: "block" }}
@@ -185,7 +185,7 @@ export function NumberTile({
           }}
         >
           <svg
-            viewBox="-25 -25 150 150"
+            viewBox="0 0 100 100"
             width="100%"
             height="100%"
             style={{ overflow: "visible", display: "block" }}

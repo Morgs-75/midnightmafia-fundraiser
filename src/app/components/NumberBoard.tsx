@@ -79,7 +79,7 @@ export function NumberBoard({ numbers, selectedNumbers, onSelectNumber }: Number
       {/* Board wrapper — relative for overlay, overflow:visible for puzzle tabs */}
       <div className="relative max-w-4xl mx-auto">
         <div
-          className="grid grid-cols-5 md:grid-cols-10 gap-2 md:gap-3"
+          className="grid grid-cols-5 md:grid-cols-10 gap-0"
           style={{ overflow: "visible" }}
           data-number-board
         >
