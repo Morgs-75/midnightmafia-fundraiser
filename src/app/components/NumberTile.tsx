@@ -8,6 +8,13 @@ interface NumberTileProps {
   onViewMessage?: (data: NumberData) => void;
 }
 
+// Three colour schemes cycling across tiles
+const PALETTES = [
+  { bg: "linear-gradient(135deg, #9333ea, #581c87)", glow: "147,51,234",  text: "#f3e8ff" }, // purple
+  { bg: "linear-gradient(135deg, #ec4899, #9d174d)", glow: "236,72,153",  text: "#fce7f3" }, // pink
+  { bg: "linear-gradient(135deg, #0ea5e9, #075985)", glow: "14,165,233",  text: "#e0f2fe" }, // sky blue
+];
+
 export function NumberTile({ data, isSelected, onSelect, onViewMessage }: NumberTileProps) {
   const { number, status, displayName } = data;
 
@@ -15,44 +22,84 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
   const isSold      = status === "sold";
   const isHeld      = status === "held";
 
+  const palette   = PALETTES[number % 3];
+  const glowRgb   = palette.glow;
+  const pulseDelay  = (number * 1.618) % 3;       // stagger glows
+  const wiggleDelay = (number * 2.303) % 5;        // stagger wiggles
+
   const handleClick = () => {
     if (isClickable)                  onSelect(number);
     else if (isSold && onViewMessage) onViewMessage(data);
   };
 
-  // Non-sold tiles: flat div, no 3D transforms
-  if (!isSold) {
+  const numStyle: React.CSSProperties = {
+    fontFamily: "Poppins, sans-serif",
+    fontWeight: 900,
+    fontSize: "clamp(0.6rem, 2.8vw, 1.2rem)",
+    lineHeight: 1,
+    display: "block",
+  };
+
+  // ── AVAILABLE tile ──────────────────────────────────────────────
+  if (isClickable && !isSelected) {
+    return (
+      <motion.div
+        onClick={handleClick}
+        className="aspect-square flex items-center justify-center rounded-md select-none cursor-pointer"
+        style={{ background: palette.bg, border: `1px solid rgba(${glowRgb},0.5)` }}
+        animate={{
+          filter: [
+            `drop-shadow(0 0 3px rgba(${glowRgb},0.4)) drop-shadow(0 0 8px rgba(${glowRgb},0.2))`,
+            `drop-shadow(0 0 8px rgba(${glowRgb},0.9)) drop-shadow(0 0 20px rgba(${glowRgb},0.5))`,
+            `drop-shadow(0 0 3px rgba(${glowRgb},0.4)) drop-shadow(0 0 8px rgba(${glowRgb},0.2))`,
+          ],
+          scale: [1, 1.06, 1],
+          rotate: [0, wiggleDelay % 2 === 0 ? 1.5 : -1.5, 0],
+        }}
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+          delay: pulseDelay,
+          ease: "easeInOut",
+        }}
+      >
+        <span style={{ ...numStyle, color: palette.text }}>{number}</span>
+      </motion.div>
+    );
+  }
+
+  // ── SELECTED tile ───────────────────────────────────────────────
+  if (isSelected) {
+    return (
+      <motion.div
+        onClick={handleClick}
+        className="aspect-square flex items-center justify-center rounded-md select-none cursor-pointer"
+        style={{
+          background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+          border: "2px solid #fde68a",
+          filter: "drop-shadow(0 0 8px rgba(251,191,36,0.8)) drop-shadow(0 0 20px rgba(251,191,36,0.4))",
+        }}
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <span style={{ ...numStyle, color: "#1c1917" }}>{number}</span>
+      </motion.div>
+    );
+  }
+
+  // ── HELD tile ───────────────────────────────────────────────────
+  if (isHeld) {
     return (
       <div
-        onClick={handleClick}
-        className={`
-          aspect-square flex items-center justify-center rounded-md
-          select-none cursor-pointer
-          ${isHeld
-            ? "bg-gray-800 border border-gray-700 opacity-40 cursor-not-allowed"
-            : isSelected
-            ? "bg-violet-600 border-2 border-violet-300 ring-2 ring-violet-400"
-            : "bg-purple-900 border border-purple-700 hover:bg-purple-800"
-          }
-        `}
+        className="aspect-square flex items-center justify-center rounded-md select-none cursor-not-allowed"
+        style={{ background: "#111827", border: "1px solid #1f2937", opacity: 0.4 }}
       >
-        <span
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 900,
-            fontSize: "clamp(0.6rem, 2.8vw, 1.2rem)",
-            color: isHeld ? "#374151" : "#ffffff",
-            lineHeight: 1,
-            display: "block",
-          }}
-        >
-          {number}
-        </span>
+        <span style={{ ...numStyle, color: "#4b5563" }}>{number}</span>
       </div>
     );
   }
 
-  // Sold tiles: 3D flip to pink back face
+  // ── SOLD tile (3D flip) ─────────────────────────────────────────
   return (
     <div style={{ perspective: "600px" }} className="aspect-square">
       <motion.div
@@ -62,25 +109,41 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
       >
         {/* FRONT */}
         <div
-          style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-          className="aspect-square flex items-center justify-center rounded-md bg-purple-900 border border-purple-700"
+          style={{
+            position: "absolute", inset: 0,
+            backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
+            background: palette.bg,
+            borderRadius: "6px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}
         >
-          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 900, fontSize: "clamp(0.6rem, 2.8vw, 1.2rem)", color: "#ffffff", lineHeight: 1 }}>
-            {number}
-          </span>
+          <span style={{ ...numStyle, color: palette.text }}>{number}</span>
         </div>
 
         {/* BACK */}
         <div
           onClick={handleClick}
-          style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-          className="aspect-square flex flex-col items-center justify-center rounded-md bg-pink-900 border border-pink-500 cursor-pointer gap-0.5"
+          style={{
+            position: "absolute", inset: 0,
+            backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            background: "linear-gradient(135deg, #9d174d, #500724)",
+            border: "1px solid rgba(249,168,212,0.5)",
+            boxShadow: "0 0 10px rgba(249,168,212,0.3)",
+            borderRadius: "6px",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            gap: "2px", cursor: "pointer",
+          }}
         >
-          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 900, fontSize: "clamp(0.6rem, 2.8vw, 1.2rem)", color: "#fce7f3", lineHeight: 1 }}>
-            {number}
-          </span>
+          <span style={{ ...numStyle, color: "#fce7f3" }}>{number}</span>
           {displayName && (
-            <span style={{ fontFamily: "Poppins, sans-serif", fontSize: "clamp(0.3rem, 1vw, 0.5rem)", color: "#f9a8d4", lineHeight: 1.2, textAlign: "center", maxWidth: "90%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <span style={{
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "clamp(0.3rem, 1vw, 0.5rem)",
+              color: "#f9a8d4", lineHeight: 1.2,
+              textAlign: "center", maxWidth: "90%",
+              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+            }}>
               {displayName}
             </span>
           )}
