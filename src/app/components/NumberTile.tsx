@@ -60,7 +60,7 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
             `}
             style={{
               fontFamily: "Anton, sans-serif",
-              fontSize: "clamp(1.4rem, 6vw, 2.8rem)",
+              fontSize: "clamp(1.1rem, 4.8vw, 2.2rem)",
             }}
           >
             {number}
@@ -82,7 +82,7 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
             className="text-pink-200 font-black leading-none"
             style={{
               fontFamily: "Anton, sans-serif",
-              fontSize: "clamp(1.4rem, 6vw, 2.8rem)",
+              fontSize: "clamp(1.1rem, 4.8vw, 2.2rem)",
             }}
           >
             {number}
