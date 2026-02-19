@@ -37,13 +37,15 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
-    // Validate display name
-    if (!displayName.trim()) {
-      newErrors.displayName = "Name is required";
-    } else if (displayName.trim().length < 2) {
-      newErrors.displayName = "Name must be at least 2 characters";
-    } else if (displayName.trim().length > 50) {
-      newErrors.displayName = "Name must be less than 50 characters";
+    // Validate display name only if showing publicly
+    if (displayPublicly) {
+      if (!displayName.trim()) {
+        newErrors.displayName = "Please enter your name";
+      } else if (displayName.trim().length < 2) {
+        newErrors.displayName = "Name must be at least 2 characters";
+      } else if (displayName.trim().length > 50) {
+        newErrors.displayName = "Name must be less than 50 characters";
+      }
     }
 
     // Validate email
@@ -225,43 +227,57 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div>
-                    <label htmlFor="displayName" className="block text-sm font-medium text-gray-300 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                      Your Name <span className="text-pink-400">*</span>
-                    </label>
-                    <input
-                      id="displayName"
-                      type="text"
-                      required
-                      value={displayName}
-                      onChange={(e) => {
-                        setDisplayName(e.target.value);
-                        if (errors.displayName) setErrors({ ...errors, displayName: undefined });
-                      }}
-                      placeholder="Enter your name"
-                      className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${
-                        errors.displayName ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-purple-500'
-                      }`}
-                      style={{ fontFamily: 'Poppins, sans-serif' }}
-                    />
-                    {errors.displayName && (
-                      <p className="mt-1 text-sm text-red-400" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                        {errors.displayName}
-                      </p>
-                    )}
-
-                    {/* Display publicly checkbox */}
-                    <div className="mt-3 flex items-start gap-3">
+                    {/* Anonymous by default — checkbox to show name */}
+                    <div className="flex items-center gap-3 py-2 px-3 bg-gray-800/50 rounded-lg border border-gray-700">
                       <input
                         id="displayPublicly"
                         type="checkbox"
                         checked={displayPublicly}
-                        onChange={(e) => setDisplayPublicly(e.target.checked)}
-                        className="mt-1 w-4 h-4 rounded border-gray-700 bg-gray-800 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-900"
+                        onChange={(e) => {
+                          setDisplayPublicly(e.target.checked);
+                          if (!e.target.checked) {
+                            setDisplayName("");
+                            setErrors({ ...errors, displayName: undefined });
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-900 cursor-pointer"
                       />
                       <label htmlFor="displayPublicly" className="text-sm text-gray-300 cursor-pointer" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                        Display my name publicly on the board <span className="text-gray-500 text-xs block mt-1">(If unchecked, your number will show as "Anonymous")</span>
+                        Display my name publicly on the board
+                        <span className="text-gray-500 text-xs block mt-0.5">
+                          Your number shows as <span className="text-purple-400">"Anonymous"</span> by default
+                        </span>
                       </label>
                     </div>
+
+                    {/* Name field — only shown when checkbox is ticked */}
+                    {displayPublicly && (
+                      <div className="mt-3">
+                        <label htmlFor="displayName" className="block text-sm font-medium text-gray-300 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                          Your Name <span className="text-pink-400">*</span>
+                        </label>
+                        <input
+                          id="displayName"
+                          type="text"
+                          value={displayName}
+                          onChange={(e) => {
+                            setDisplayName(e.target.value);
+                            if (errors.displayName) setErrors({ ...errors, displayName: undefined });
+                          }}
+                          placeholder="Enter your name"
+                          autoFocus
+                          className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${
+                            errors.displayName ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-purple-500'
+                          }`}
+                          style={{ fontFamily: 'Poppins, sans-serif' }}
+                        />
+                        {errors.displayName && (
+                          <p className="mt-1 text-sm text-red-400" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                            {errors.displayName}
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   
                   {/* Collapsible Encouragement Message */}
