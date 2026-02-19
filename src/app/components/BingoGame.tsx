@@ -15,6 +15,7 @@ import { QRCodeModal } from "./QRCodeModal";
 import { ShareQRButton } from "./ShareQRButton";
 import { WelcomeHint } from "./WelcomeHint";
 import { TermsModal } from "./TermsModal";
+import { PrivacyModal } from "./PrivacyModal";
 import { GoalReachedPopup } from "./GoalReachedPopup";
 import { NumberData } from "../types";
 import {
@@ -102,6 +103,7 @@ export function BingoGame() {
   // QR Code modal state
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const currentUrl =
     typeof window !== "undefined"
       ? window.location.origin
@@ -434,16 +436,25 @@ export function BingoGame() {
           Payments secured by Stripe · Questions? Contact{" "}
           {CONFIG.contactPhone} or {CONFIG.contactEmail}
         </p>
-        <button
-          onClick={() => setIsTermsOpen(true)}
-          className="mt-4 text-sm text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
-          style={{ fontFamily: "Poppins, sans-serif" }}
-        >
-          Terms of Service
-        </button>
+        <div className="mt-4 flex items-center justify-center gap-4 text-sm" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <button
+            onClick={() => setIsTermsOpen(true)}
+            className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
+          >
+            Terms of Service
+          </button>
+          <span className="text-gray-700">·</span>
+          <button
+            onClick={() => setIsPrivacyOpen(true)}
+            className="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors"
+          >
+            Privacy Policy
+          </button>
+        </div>
       </footer>
 
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
+      <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
 
       {/* Checkout Components */}
       <CheckoutBar
