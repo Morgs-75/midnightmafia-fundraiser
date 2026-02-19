@@ -15,7 +15,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [displayPublicly, setDisplayPublicly] = useState(false);
+  const [stayAnonymous, setStayAnonymous] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMessageExpanded, setIsMessageExpanded] = useState(false);
@@ -37,15 +37,13 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
-    // Validate display name only if showing publicly
-    if (displayPublicly) {
-      if (!displayName.trim()) {
-        newErrors.displayName = "Please enter your name";
-      } else if (displayName.trim().length < 2) {
-        newErrors.displayName = "Name must be at least 2 characters";
-      } else if (displayName.trim().length > 50) {
-        newErrors.displayName = "Name must be less than 50 characters";
-      }
+    // Always validate name
+    if (!displayName.trim()) {
+      newErrors.displayName = "Please enter your name";
+    } else if (displayName.trim().length < 2) {
+      newErrors.displayName = "Name must be at least 2 characters";
+    } else if (displayName.trim().length > 50) {
+      newErrors.displayName = "Name must be less than 50 characters";
     }
 
     // Validate email
@@ -101,7 +99,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
           body: JSON.stringify({
             boardId: BOARD_ID,
             numbers: selectedNumbers,
-            displayName: displayPublicly ? displayName.trim() : 'Anonymous',
+            displayName: stayAnonymous ? 'Anonymous' : displayName.trim(),
             email: email.trim(),
             phone: phone.trim(),
             message: message.trim(),
@@ -133,7 +131,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
         body: JSON.stringify({
           boardId: BOARD_ID,
           numbers: selectedNumbers,
-          displayName: displayPublicly ? displayName.trim() : 'Anonymous',
+          displayName: stayAnonymous ? 'Anonymous' : displayName.trim(),
           email: email.trim(),
           phone: phone.trim(),
           message: message.trim(),
@@ -226,58 +224,49 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
               {/* Content */}
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 <form onSubmit={handleSubmit} className="space-y-3">
-                  <div>
-                    {/* Anonymous by default — checkbox to show name */}
+                  <div className="space-y-3">
+                    {/* Name field — always required */}
+                    <div>
+                      <label htmlFor="displayName" className="block text-sm font-medium text-gray-300 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                        Your Name <span className="text-pink-400">*</span>
+                      </label>
+                      <input
+                        id="displayName"
+                        type="text"
+                        value={displayName}
+                        onChange={(e) => {
+                          setDisplayName(e.target.value);
+                          if (errors.displayName) setErrors({ ...errors, displayName: undefined });
+                        }}
+                        placeholder="Enter your name"
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${
+                          errors.displayName ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-purple-500'
+                        }`}
+                        style={{ fontFamily: 'Poppins, sans-serif' }}
+                      />
+                      {errors.displayName && (
+                        <p className="mt-1 text-sm text-red-400" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                          {errors.displayName}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Anonymous opt-in */}
                     <div className="flex items-center gap-3 py-2 px-3 bg-gray-800/50 rounded-lg border border-gray-700">
                       <input
-                        id="displayPublicly"
+                        id="stayAnonymous"
                         type="checkbox"
-                        checked={displayPublicly}
-                        onChange={(e) => {
-                          setDisplayPublicly(e.target.checked);
-                          if (!e.target.checked) {
-                            setDisplayName("");
-                            setErrors({ ...errors, displayName: undefined });
-                          }
-                        }}
+                        checked={stayAnonymous}
+                        onChange={(e) => setStayAnonymous(e.target.checked)}
                         className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-900 cursor-pointer"
                       />
-                      <label htmlFor="displayPublicly" className="text-sm text-gray-300 cursor-pointer" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                        Display my name publicly on the board
+                      <label htmlFor="stayAnonymous" className="text-sm text-gray-300 cursor-pointer" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                        I would like to remain anonymous
                         <span className="text-gray-500 text-xs block mt-0.5">
-                          Your number shows as <span className="text-purple-400">"Anonymous"</span> by default
+                          Your number will show as <span className="text-purple-400">"Anonymous"</span> on the board
                         </span>
                       </label>
                     </div>
-
-                    {/* Name field — only shown when checkbox is ticked */}
-                    {displayPublicly && (
-                      <div className="mt-3">
-                        <label htmlFor="displayName" className="block text-sm font-medium text-gray-300 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                          Your Name <span className="text-pink-400">*</span>
-                        </label>
-                        <input
-                          id="displayName"
-                          type="text"
-                          value={displayName}
-                          onChange={(e) => {
-                            setDisplayName(e.target.value);
-                            if (errors.displayName) setErrors({ ...errors, displayName: undefined });
-                          }}
-                          placeholder="Enter your name"
-                          autoFocus
-                          className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${
-                            errors.displayName ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-purple-500'
-                          }`}
-                          style={{ fontFamily: 'Poppins, sans-serif' }}
-                        />
-                        {errors.displayName && (
-                          <p className="mt-1 text-sm text-red-400" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                            {errors.displayName}
-                          </p>
-                        )}
-                      </div>
-                    )}
                   </div>
                   
                   {/* Collapsible Encouragement Message */}
