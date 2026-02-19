@@ -10,7 +10,7 @@ interface NumberTileProps {
 
 const numStyle = {
   fontFamily: "Anton, sans-serif",
-  fontSize: "clamp(0.72rem, 3.1vw, 1.44rem)",
+  fontSize: "clamp(0.54rem, 2.3vw, 1.08rem)",
   WebkitFontSmoothing: "antialiased" as const,
   MozOsxFontSmoothing: "grayscale" as const,
 };
