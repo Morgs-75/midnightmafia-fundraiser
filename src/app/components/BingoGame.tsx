@@ -291,8 +291,6 @@ export function BingoGame() {
       {/* Welcome Hint Popup */}
       <WelcomeHint />
 
-      {/* Casino-style UI Components */}
-      <FloatingBadges />
 
       {/* Prize Drawn Popup */}
       <PrizeDrawnPopup
