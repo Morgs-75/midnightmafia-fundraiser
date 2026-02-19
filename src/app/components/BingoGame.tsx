@@ -293,12 +293,6 @@ export function BingoGame() {
 
       {/* Casino-style UI Components */}
       <FloatingBadges />
-      <UrgencyPopups
-        onClaimBonus={handleClaimBonus}
-        availableCount={
-          numbers.filter((n) => n.status === "available").length
-        }
-      />
 
       {/* Prize Drawn Popup */}
       <PrizeDrawnPopup
