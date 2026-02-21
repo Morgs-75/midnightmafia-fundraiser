@@ -388,6 +388,32 @@ export function BingoGame() {
         onSelectNumber={handleSelectNumber}
       />
 
+      {/* Bottom Prize Banner */}
+      <div className="w-full overflow-hidden bg-black border-y-4 border-pink-500 py-8 my-6">
+        <style>{`
+          @keyframes ticker-bottom {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .ticker-bottom-inner {
+            display: inline-flex;
+            animation: ticker-bottom 40s linear infinite;
+            white-space: nowrap;
+          }
+        `}</style>
+        <div className="ticker-bottom-inner">
+          {Array(10).fill(null).map((_, i) => (
+            <span
+              key={i}
+              className="mx-12 text-pink-400 text-5xl font-black"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', filter: 'drop-shadow(0 0 8px rgba(236,72,153,0.8))' }}
+            >
+              🎁 WIN! Private Stunt Session &nbsp;⭐&nbsp; WIN! Beauty Basket &nbsp;⭐&nbsp; WIN! Iconic Fruit Loop Shirt &nbsp;⭐&nbsp; WIN! Gift Cards &nbsp;⭐&nbsp; WIN! Over 18 Beverage Bundle
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Instagram Story Modal - Show after sweep upsell is closed */}
       {lastPurchase && (
         <InstagramStoryModal
