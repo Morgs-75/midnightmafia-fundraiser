@@ -56,7 +56,8 @@ export function calculateTotal(count: number): {
  * @returns Fee amount in dollars
  */
 export function calculateStripeFee(subtotal: number): number {
-  return (subtotal * 0.016) + 0.10;
+  // Square AU rate: 1.6% + $0.10
+  return Math.round(((subtotal * 0.016) + 0.10) * 100) / 100;
 }
 
 /**
