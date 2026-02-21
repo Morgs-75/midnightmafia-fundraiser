@@ -108,9 +108,9 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
       onClick={handleClick}
       className="aspect-square flex flex-col items-center justify-center rounded-md select-none cursor-pointer"
       style={{
-        background: "linear-gradient(135deg, rgba(190,18,60,0.82), rgba(131,15,52,0.82))",
-        border: "1px solid rgba(251,113,133,0.7)",
-        boxShadow: "0 0 8px rgba(251,113,133,0.5), 0 0 18px rgba(251,113,133,0.25)",
+        background: "linear-gradient(135deg, rgba(255,182,212,0.45), rgba(255,154,193,0.35))",
+        border: "1px solid rgba(255,182,212,0.7)",
+        boxShadow: "0 0 8px rgba(255,182,212,0.5), 0 0 18px rgba(255,182,212,0.25)",
         gap: "2px",
       }}
     >
