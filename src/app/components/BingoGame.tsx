@@ -405,8 +405,8 @@ export function BingoGame() {
           {Array(10).fill(null).map((_, i) => (
             <span
               key={i}
-              className="text-pink-400 text-5xl font-black"
-              style={{ fontFamily: 'Bebas Neue, sans-serif', filter: 'drop-shadow(0 0 8px rgba(236,72,153,0.8))' }}
+              className="text-5xl font-black"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', color: '#ec4899', filter: 'drop-shadow(0 0 8px rgba(236,72,153,0.8))' }}
             >
               WIN! Private Stunt Session &nbsp;|&nbsp; WIN! Beauty Basket &nbsp;|&nbsp; WIN! Iconic Fruit Loop Shirt &nbsp;|&nbsp; WIN! Gift Cards &nbsp;|&nbsp; WIN! Over 18 Beverage Bundle &nbsp;|&nbsp;
             </span>

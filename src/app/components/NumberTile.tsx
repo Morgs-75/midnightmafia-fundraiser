@@ -12,8 +12,8 @@ interface NumberTileProps {
 // Glow colours cycling across tiles
 const GLOWS = [
   "192,162,255", // lavender
-  "251,182,225", // pink
-  "147,220,252", // sky blue
+  "236,72,153", // pink #ec4899
+  "72,222,236", // cyan #48deec
 ];
 
 export function NumberTile({ data, isSelected, onSelect, onViewMessage }: NumberTileProps) {
@@ -126,7 +126,7 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
       <span style={{
           fontFamily: "Poppins, sans-serif",
           fontWeight: 900,
-          fontSize: "clamp(0.67rem, 2.7vw, 1.23rem)",
+          fontSize: "clamp(0.57rem, 2.3vw, 1.05rem)",
           color: "rgba(255,255,255,1)",
           letterSpacing: "0.05em",
           lineHeight: 1,
