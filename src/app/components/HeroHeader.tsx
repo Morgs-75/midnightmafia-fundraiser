@@ -119,8 +119,8 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
         
         {/* PRICING SECTION */}
         <div className="mt-8 max-w-3xl mx-auto">
-          <h3 className="text-2xl md:text-3xl text-yellow-400 mb-2 font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700, letterSpacing: '0.5px' }}>
-            💰 Pricing 💰
+          <h3 className="text-2xl md:text-3xl text-white mb-2 font-bold" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 700, letterSpacing: '0.5px' }}>
+            <span style={{ color: '#ffff87' }}>★</span> Pricing <span style={{ color: '#ffff87' }}>★</span>
           </h3>
           <p className="text-center text-gray-300 text-base mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
             Select your numbers directly from the board below!
@@ -149,7 +149,7 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
               <motion.div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg"
                 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700 }}
-                animate={{ scale: [1, 1.1, 1] }}
+                animate={{ scale: [1, 1.65, 1] }}
                 transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
               >
                 BEST VALUE

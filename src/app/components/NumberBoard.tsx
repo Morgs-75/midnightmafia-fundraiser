@@ -17,7 +17,7 @@ export function NumberBoard({ numbers, selectedNumbers, onSelectNumber }: Number
   return (
     <section className="px-4 pt-2 pb-8">
       <h2 className="text-3xl mb-6 text-center text-white" style={{ fontFamily: "Bebas Neue, sans-serif" }}>
-        Choose Your Lucky Numbers
+        <span style={{ color: '#ffff87' }}>★</span> Choose Your Lucky Numbers <span style={{ color: '#ffff87' }}>★</span>
       </h2>
 
 
