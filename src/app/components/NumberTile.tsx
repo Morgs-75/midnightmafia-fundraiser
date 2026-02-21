@@ -114,6 +114,15 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         gap: "2px",
       }}
     >
+      <span style={{
+          fontFamily: "Poppins, sans-serif",
+          fontWeight: 900,
+          fontSize: "clamp(0.2rem, 0.9vw, 0.4rem)",
+          color: "rgba(255,255,255,0.7)",
+          letterSpacing: "0.05em",
+          lineHeight: 1,
+          display: "block",
+        }}>SOLD</span>
       <span style={{ ...numStyle, fontSize: "clamp(0.5rem, 2.2vw, 1rem)" }}>{number}</span>
       {displayName && (
         <span style={{
