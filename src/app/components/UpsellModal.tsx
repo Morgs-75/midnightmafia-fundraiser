@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { X, Gift, Zap, TrendingUp, Sparkles } from "lucide-react";
+import { Gift, TrendingUp, Sparkles, X } from "lucide-react";
 
 interface UpsellModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ export function UpsellModal({ isOpen, selectedNumbers, pricePerNumber, onClose, 
 
   const numbersToAdd = 5 - currentCount;
   const newTotal = 5;
-  const currentPrice = currentCount * 25;
+  const currentPrice = currentCount * pricePerNumber;
   const dealPrice = 100;
   const additionalCost = 100 - currentPrice;
   const isBonus = additionalCost === 0;
@@ -82,6 +82,14 @@ export function UpsellModal({ isOpen, selectedNumbers, pricePerNumber, onClose, 
 
               {/* Content */}
               <div className="relative p-6 md:p-8">
+                {/* Close button */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors z-20"
+                >
+                  <X className="w-5 h-5 text-white/70" />
+                </button>
+
                 {/* Floating badges - Multiple! */}
                 <motion.div
                   animate={{ 

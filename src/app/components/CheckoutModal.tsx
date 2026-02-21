@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Lock, Sparkles, ChevronDown } from "lucide-react";
+import { X, Lock, Sparkles, ChevronDown, Gift } from "lucide-react";
 import { calculatePrice, calculateStripeFee, calculateTotalWithFees, PRICE_PER_NUMBER } from "../../lib/pricing";
 
 interface CheckoutModalProps {
   isOpen: boolean;
   selectedNumbers: number[];
-  pricePerNumber: number;
   onClose: () => void;
 }
 
-export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose }: CheckoutModalProps) {
+export function CheckoutModal({ isOpen, selectedNumbers, onClose }: CheckoutModalProps) {
   const [displayName, setDisplayName] = useState("");
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");

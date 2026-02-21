@@ -12,7 +12,7 @@ export function useNumbers() {
     try {
       const { data, error } = await supabase
         .from('numbers')
-        .select('number, status, display_name, message, promo_code')
+        .select('number, status, display_name, message')
         .eq('board_id', BOARD_ID)
         .order('number', { ascending: true });
 

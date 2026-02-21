@@ -108,7 +108,6 @@ export async function handler(event) {
         message: hold.message,
         hold_expires_at: null,
         hold_id: null,
-        promo_code: null,
       })
       .eq('hold_id', holdId)
       .eq('status', 'held')
@@ -132,6 +131,7 @@ export async function handler(event) {
         message: hold.message,
         amount_cents: payment.total_money?.amount ?? 0,
         stripe_payment_intent: payment.id, // column repurposed for Square payment ID
+        numbers: updatedNumbers.map(n => n.number),
       });
 
     if (purchaseError) {
