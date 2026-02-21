@@ -58,8 +58,8 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
         {/* SCROLLING PRIZE BANNER */}
         <style>{`
           @keyframes ticker {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0%   { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
           }
           .ticker-inner {
             display: inline-flex;
@@ -82,7 +82,7 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
                 className="ticker-text mx-16 text-yellow-400 text-5xl font-black"
                 style={{ fontFamily: 'Bebas Neue, sans-serif' }}
               >
-                🏆 WIN $500
+                🏆 Grand Prize $500
               </span>
             ))}
           </div>
