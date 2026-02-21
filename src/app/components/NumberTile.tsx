@@ -118,9 +118,9 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
       onClick={handleClick}
       className="aspect-square flex flex-col items-center justify-center rounded-md select-none cursor-pointer"
       style={{
-        background: "linear-gradient(135deg, rgba(236,72,153,0.55), rgba(219,39,119,0.45))",
-        border: "1px solid rgba(236,72,153,0.8)",
-        boxShadow: "0 0 8px rgba(236,72,153,0.5), 0 0 18px rgba(236,72,153,0.25)",
+        background: "#000080",
+        border: "1px solid rgba(0,0,128,0.8)",
+        boxShadow: "0 0 8px rgba(0,0,128,0.5), 0 0 18px rgba(0,0,128,0.25)",
         gap: "2px",
       }}
     >
@@ -133,7 +133,7 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
           lineHeight: 1,
           display: "block",
         }}>SOLD</span>
-      <span style={{ ...numStyle, fontSize: "clamp(0.4rem, 1.76vw, 0.8rem)", color: "#000080" }}>{number}</span>
+      <span style={{ ...numStyle, fontSize: "clamp(0.4rem, 1.76vw, 0.8rem)" }}>{number}</span>
       {displayName && (
         <span style={{
           fontFamily: "Poppins, sans-serif",
