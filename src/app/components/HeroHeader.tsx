@@ -158,6 +158,9 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
           <p className="text-center text-yellow-300 text-sm mt-4 font-semibold" style={{ fontFamily: 'Poppins, sans-serif' }}>
             ⚡ More numbers = Better odds of winning $500!
           </p>
+          <p className="text-center text-gray-300 text-base mt-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Select your numbers directly from the board below!
+          </p>
         </div>
         
         <div className="mt-6 flex flex-wrap gap-3 justify-center text-sm text-gray-400">
