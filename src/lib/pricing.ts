@@ -51,16 +51,16 @@ export function calculateTotal(count: number): {
 }
 
 /**
- * Calculate Stripe processing fees (1.75% + $0.30 AUD)
+ * Calculate Square processing fees (1.6% + $0.10 AUD)
  * @param subtotal Subtotal before fees
  * @returns Fee amount in dollars
  */
 export function calculateStripeFee(subtotal: number): number {
-  return (subtotal * 0.0175) + 0.30;
+  return (subtotal * 0.016) + 0.10;
 }
 
 /**
- * Calculate total including Stripe fees
+ * Calculate total including Square fees
  * @param subtotal Subtotal before fees
  * @returns Total including fees
  */

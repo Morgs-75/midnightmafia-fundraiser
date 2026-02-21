@@ -148,8 +148,8 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
 
       const { holdId } = await holdRes.json();
 
-      // Step 2: Create Stripe Checkout session
-      const checkoutRes = await fetch('/.netlify/functions/create-checkout', {
+      // Step 2: Create Square payment link
+      const checkoutRes = await fetch('/.netlify/functions/create-square-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -464,7 +464,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
                               <span>${subtotal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-gray-400 text-xs">
-                              <span>Payment processing fee</span>
+                              <span>Square processing fee</span>
                               <span>${stripeFee.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-white font-bold pt-2 border-t border-gray-600 text-base">
