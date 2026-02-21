@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Check } from "lucide-react";
+import { useState, useEffect } from "react";
 import { NumberData } from "../types";
 
 interface NumberTileProps {
@@ -31,6 +32,28 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
     if (isClickable)                  onSelect(number);
     else if (isSold && onViewMessage) onViewMessage(data);
   };
+
+  const [pickMeStage, setPickMeStage] = useState<null | 'text' | 'emoji'>(null);
+
+  useEffect(() => {
+    if (!isClickable) return;
+    let timeout: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      const delay = 6000 + Math.random() * 14000;
+      timeout = setTimeout(() => {
+        setPickMeStage('text');
+        timeout = setTimeout(() => {
+          setPickMeStage('emoji');
+          timeout = setTimeout(() => {
+            setPickMeStage(null);
+            schedule();
+          }, 1000);
+        }, 1200);
+      }, delay);
+    };
+    timeout = setTimeout(schedule, Math.random() * 10000);
+    return () => clearTimeout(timeout);
+  }, [isClickable]);
 
   const numStyle: React.CSSProperties = {
     fontFamily: "Poppins, sans-serif",
@@ -65,7 +88,15 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         }}
         transition={{ duration: 2.5, repeat: Infinity, delay: pulseDelay, ease: "easeInOut" }}
       >
-        <span style={numStyle}>{number}</span>
+        {pickMeStage === 'text' ? (
+          <span style={{ fontFamily: "Poppins, sans-serif", fontWeight: 900, fontSize: "clamp(0.35rem, 1.6vw, 0.65rem)", color: "#ffffff", textAlign: "center", lineHeight: 1.2 }}>
+            Pick Me
+          </span>
+        ) : pickMeStage === 'emoji' ? (
+          <span style={{ fontSize: "clamp(0.8rem, 3vw, 1.4rem)", lineHeight: 1 }}>😢</span>
+        ) : (
+          <span style={numStyle}>{number}</span>
+        )}
       </motion.div>
     );
   }
