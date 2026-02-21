@@ -9,7 +9,6 @@ import { FloatingBadges } from "./FloatingBadges";
 import { UrgencyPopups } from "./UrgencyPopups";
 import { UpsellModal } from "./UpsellModal";
 import { SweepUpsellModal } from "./SweepUpsellModal";
-import { PrizeDrawnPopup } from "./PrizeDrawnPopup";
 import { MessageBubble } from "./MessageBubble";
 import { QRCodeModal } from "./QRCodeModal";
 import { ShareQRButton } from "./ShareQRButton";
@@ -292,11 +291,6 @@ export function BingoGame() {
       <WelcomeHint />
 
 
-      {/* Prize Drawn Popup */}
-      <PrizeDrawnPopup
-        drawDate={CONFIG.prizeDrawPopup.date}
-        drawTime={CONFIG.prizeDrawPopup.time}
-      />
 
       {/* Goal Reached Popup */}
       <GoalReachedPopup totalRaised={totalRaised} goalAmount={1000} />
