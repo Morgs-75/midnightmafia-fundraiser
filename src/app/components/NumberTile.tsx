@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Check } from "lucide-react";
 import { NumberData } from "../types";
 
 interface NumberTileProps {
@@ -85,7 +86,7 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
       >
-        <span style={numStyle}>{number}</span>
+        <Check style={{ color: "#ffffff", width: "clamp(0.8rem, 3.5vw, 1.4rem)", height: "clamp(0.8rem, 3.5vw, 1.4rem)", strokeWidth: 3 }} />
       </motion.div>
     );
   }
