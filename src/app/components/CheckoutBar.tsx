@@ -15,12 +15,12 @@ const calculatePrice = (count: number, pricePerNumber: number) => {
   return 100 + ((count - 5) * pricePerNumber);
 };
 
-// Calculate Stripe fees (1.75% + $0.30 AUD)
+// Calculate Square fees (1.6% + $0.10 AUD)
 const calculateStripeFee = (subtotal: number) => {
-  return (subtotal * 0.0175) + 0.30;
+  return Math.round(((subtotal * 0.016) + 0.10) * 100) / 100;
 };
 
-// Calculate total including Stripe fees
+// Calculate total including Square fees
 const calculateTotalWithFees = (subtotal: number) => {
   const fee = calculateStripeFee(subtotal);
   return subtotal + fee;
