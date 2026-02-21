@@ -86,7 +86,16 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
         }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
       >
-        <Check style={{ color: "#ffffff", width: "clamp(1.2rem, 5vw, 2rem)", height: "clamp(1.2rem, 5vw, 2rem)", strokeWidth: 3 }} />
+        <div style={{
+          border: "2px solid #a3e635",
+          borderRadius: "50%",
+          padding: "clamp(2px, 0.5vw, 4px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          <Check style={{ color: "#a3e635", width: "clamp(1.2rem, 5vw, 2rem)", height: "clamp(1.2rem, 5vw, 2rem)", strokeWidth: 3 }} />
+        </div>
       </motion.div>
     );
   }
