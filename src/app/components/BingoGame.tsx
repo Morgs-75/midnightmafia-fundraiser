@@ -439,7 +439,6 @@ export function BingoGame() {
       <CheckoutModal
         isOpen={isCheckoutOpen}
         selectedNumbers={selectedNumbers}
-        pricePerNumber={CONFIG.pricePerNumber}
         onClose={() => {
           setIsCheckoutOpen(false);
           setSelectedNumbers([]); // Clear selection when closing checkout
