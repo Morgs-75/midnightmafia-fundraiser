@@ -389,7 +389,7 @@ export function BingoGame() {
       />
 
       {/* Bottom Prize Banner */}
-      <div className="w-full overflow-hidden bg-black border-y-4 border-pink-500 py-8 my-6">
+      <div className="w-full overflow-hidden bg-black border-y-4 border-pink-500 py-4 mb-6" style={{ marginTop: '0.45rem' }}>
         <style>{`
           @keyframes ticker-bottom {
             0%   { transform: translateX(0); }
