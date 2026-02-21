@@ -15,15 +15,14 @@ const calculatePrice = (count: number, pricePerNumber: number) => {
   return 100 + ((count - 5) * pricePerNumber);
 };
 
-// Gross up fee so net received = subtotal after Square's 1.6% + $0.10 + 10% GST on fee
+// Gross up fee so net received = subtotal after Square's 2.0% + 10% GST = 2.2% effective rate
 const calculateStripeFee = (subtotal: number) => {
-  return Math.round(((subtotal * 0.0176 + 0.11) / 0.9824) * 100) / 100;
+  return Math.round((Math.ceil((subtotal / 0.978) * 100) / 100 - subtotal) * 100) / 100;
 };
 
 // Calculate total including Square fees
 const calculateTotalWithFees = (subtotal: number) => {
-  const fee = calculateStripeFee(subtotal);
-  return subtotal + fee;
+  return Math.ceil((subtotal / 0.978) * 100) / 100;
 };
 
 // Updated layout: Checkout button moved to top row

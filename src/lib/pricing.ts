@@ -51,13 +51,13 @@ export function calculateTotal(count: number): {
 }
 
 /**
- * Calculate fee to charge so that after Square's deductions (1.6% + $0.10 + 10% GST on fee)
- * the net received equals the subtotal exactly.
- * Formula: fee = (subtotal * 0.0176 + 0.11) / 0.9824
+ * Calculate fee to charge so that after Square's deductions (2.0% + 10% GST = 2.2% effective)
+ * the net received equals at least the subtotal.
+ * Formula: gross = ceil(subtotal / 0.978 * 100) / 100
  */
 export function calculateStripeFee(subtotal: number): number {
-  const fee = (subtotal * 0.0176 + 0.11) / 0.9824;
-  return Math.round(fee * 100) / 100;
+  const total = Math.ceil((subtotal / 0.978) * 100) / 100;
+  return Math.round((total - subtotal) * 100) / 100;
 }
 
 /**
@@ -66,6 +66,5 @@ export function calculateStripeFee(subtotal: number): number {
  * @returns Total including fees
  */
 export function calculateTotalWithFees(subtotal: number): number {
-  const fee = calculateStripeFee(subtotal);
-  return subtotal + fee;
+  return Math.ceil((subtotal / 0.978) * 100) / 100;
 }

@@ -420,7 +420,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
 
                   <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
                     <Lock className="w-4 h-4" />
-                    <span style={{ fontFamily: 'Poppins, sans-serif' }}>Payments secured by Stripe</span>
+                    <span style={{ fontFamily: 'Poppins, sans-serif' }}>Payments secured by Square</span>
                   </div>
 
                   <p className="text-xs text-center text-gray-500" style={{ fontFamily: 'Poppins, sans-serif' }}>
