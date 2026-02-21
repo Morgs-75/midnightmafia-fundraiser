@@ -103,7 +103,7 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
         
         <h1 className="text-6xl md:text-7xl mb-4 tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 900, letterSpacing: '1px' }}>
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200">
-            Midnight Mafia Fundraiser!
+            Midnight Mafia Worlds Fundraiser!
           </span>
         </h1>
         
