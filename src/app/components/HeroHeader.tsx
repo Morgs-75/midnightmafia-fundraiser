@@ -101,11 +101,17 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
           )}
         </div> */}
         
-        <h1 className="text-6xl md:text-7xl mb-4 tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 900, letterSpacing: '1px' }}>
+        <h1 className="text-4xl md:text-5xl mb-4 tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 900, letterSpacing: '1px' }}>
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200">
             Midnight Mafia Worlds Fundraiser!
           </span>
         </h1>
+
+        <img
+          src="/assets/team-photo.png"
+          alt="Midnight Mafia team at AASCF Nationals"
+          className="w-full max-w-2xl mx-auto rounded-2xl shadow-2xl mb-4"
+        />
         
         <p className="text-lg md:text-xl text-gray-300 mx-auto" style={{ fontFamily: 'Poppins, sans-serif' }}>
           Pick your number. Support the team. Win prizes.
