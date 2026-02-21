@@ -1,24 +1,29 @@
-import { motion } from "motion/react";
+import { motion, useAnimation } from "motion/react";
 import { QrCode } from "lucide-react";
+import { useEffect } from "react";
 
 interface ShareQRButtonProps {
   onClick: () => void;
 }
 
 export function ShareQRButton({ onClick }: ShareQRButtonProps) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls
+      .start({ scale: 1, transition: { type: "spring", stiffness: 260, damping: 20 } })
+      .then(() =>
+        controls.start({
+          scale: [1, 1.15, 1],
+          transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+        })
+      );
+  }, [controls]);
+
   return (
     <motion.button
       initial={{ scale: 0 }}
-      animate={{
-        scale: [1, 1.15, 1],
-      }}
-      transition={{
-        scale: {
-          duration: 1.5,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }
-      }}
+      animate={controls}
       whileHover={{ scale: 1.2 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}

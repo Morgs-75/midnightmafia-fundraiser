@@ -9,12 +9,6 @@ interface NumberTileProps {
   onViewMessage?: (data: NumberData) => void;
 }
 
-// Glow colours cycling across tiles
-const GLOWS = [
-  "236,72,153", // pink #ec4899
-  "72,222,236", // blue #48deec
-];
-
 export function NumberTile({ data, isSelected, onSelect, onViewMessage }: NumberTileProps) {
   const { number, status, displayName } = data;
 
@@ -22,7 +16,6 @@ export function NumberTile({ data, isSelected, onSelect, onViewMessage }: Number
   const isSold      = status === "sold";
   const isHeld      = status === "held";
 
-  const glowRgb    = GLOWS[number % 2];
   const pulseDelay  = (number * 1.618) % 3;
   const wiggleDelay = (number * 2.303) % 5;
 

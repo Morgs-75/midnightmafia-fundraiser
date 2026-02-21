@@ -5,8 +5,6 @@ import { CheckoutBar } from "./CheckoutBar";
 import { CheckoutModal } from "./CheckoutModal";
 import { ThankYouModal } from "./ThankYouModal";
 import { InstagramStoryModal } from "./InstagramStoryModal";
-import { FloatingBadges } from "./FloatingBadges";
-import { UrgencyPopups } from "./UrgencyPopups";
 import { UpsellModal } from "./UpsellModal";
 import { SweepUpsellModal } from "./SweepUpsellModal";
 import { MessageBubble } from "./MessageBubble";
@@ -88,8 +86,6 @@ export function BingoGame() {
   const [isInstagramModalOpen, setIsInstagramModalOpen] =
     useState(false);
   const [purchaseComplete, setPurchaseComplete] =
-    useState(false);
-  const [hasSeenSweepUpsell, setHasSeenSweepUpsell] =
     useState(false);
   const [isSweepBonusMode, setIsSweepBonusMode] =
     useState(false);
@@ -223,48 +219,6 @@ export function BingoGame() {
     setIsInstagramModalOpen(true);
   };
 
-  const handleClaimBonus = (
-    popupType: "flash" | "bonus" | "alert",
-  ) => {
-    // Auto-select available numbers based on the popup type
-    const availableNumbers = numbers
-      .filter((n) => n.status === "available")
-      .map((n) => n.number);
-
-    if (popupType === "flash" || popupType === "bonus") {
-      // For flash/bonus deal: auto-select 5 numbers for $100
-      const numbersToSelect = availableNumbers.slice(0, 5);
-      setSelectedNumbers(numbersToSelect);
-      setIsCheckoutOpen(true);
-    } else if (popupType === "alert") {
-      // For alert: just open checkout with any current selection
-      setIsCheckoutOpen(true);
-    }
-  };
-
-  const createConfetti = () => {
-    // Simple confetti effect using motion
-    const confettiContainer = document.getElementById(
-      "confetti-container",
-    );
-    if (!confettiContainer) return;
-
-    for (let i = 0; i < 50; i++) {
-      const confetti = document.createElement("div");
-      confetti.className = "confetti-piece";
-      confetti.style.left = `${Math.random() * 100}%`;
-      confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-      confetti.style.backgroundColor = [
-        "#ffd700",
-        "#ff1493",
-        "#bf40ff",
-      ][Math.floor(Math.random() * 3)];
-      confettiContainer.appendChild(confetti);
-
-      setTimeout(() => confetti.remove(), 3000);
-    }
-  };
-
   useEffect(() => {
     if (purchaseComplete) {
       const timer = setTimeout(
@@ -389,7 +343,7 @@ export function BingoGame() {
       />
 
       {/* Bottom Prize Banner */}
-      <div className="w-full overflow-hidden bg-black border-y-4 border-pink-500 py-4 mb-6" style={{ marginTop: '0.45rem' }}>
+      <div className="w-full overflow-hidden bg-black border-y-4 border-pink-500 py-4 mb-6 mt-[0.45rem]">
         <style>{`
           @keyframes ticker-bottom {
             0%   { transform: translateX(0); }
@@ -478,7 +432,6 @@ export function BingoGame() {
       {/* Checkout Components */}
       <CheckoutBar
         selectedNumbers={selectedNumbers}
-        pricePerNumber={CONFIG.pricePerNumber}
         onCheckout={handleCheckout}
         onClearSelection={handleClearSelection}
       />

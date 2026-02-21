@@ -1,4 +1,3 @@
-import { Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 
@@ -38,17 +37,6 @@ export function HeroHeader({ drawDate }: HeroHeaderProps) {
 
     return () => clearInterval(interval);
   }, [drawDate]);
-
-  const formatDrawDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
 
   return (
     <header className="relative px-4 py-8 text-center" style={{ paddingBottom: '10px' }}>

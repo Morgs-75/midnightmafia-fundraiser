@@ -5,7 +5,7 @@ export interface NumberData {
   status: NumberStatus;
   displayName?: string;
   message?: string;
-
+  isTeamNumber?: boolean;
 }
 
 export interface SupporterEntry {

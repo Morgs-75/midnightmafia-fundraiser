@@ -29,24 +29,19 @@ export function calculatePrice(count: number): number {
 /**
  * Calculate total with savings breakdown
  * @param count Number of tickets being purchased
- * @returns Object with total, savings, and free numbers count
+ * @returns Object with total and savings
  */
 export function calculateTotal(count: number): {
   total: number;
   savings: number;
-  freeNumbers: number;
 } {
   const regularPrice = count * PRICE_PER_NUMBER;
   const subtotal = calculatePrice(count);
   const savings = regularPrice - subtotal;
 
-  // 1 number free when buying 5 (saves $25)
-  const freeNumbers = count >= 5 ? 1 : 0;
-
   return {
     total: subtotal,
     savings,
-    freeNumbers
   };
 }
 

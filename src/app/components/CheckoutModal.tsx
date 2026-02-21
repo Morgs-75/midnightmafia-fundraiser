@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Lock, Sparkles, Gift, ChevronDown } from "lucide-react";
+import { X, Lock, Sparkles, ChevronDown } from "lucide-react";
 import { calculatePrice, calculateStripeFee, calculateTotalWithFees, PRICE_PER_NUMBER } from "../../lib/pricing";
 
 interface CheckoutModalProps {
@@ -31,7 +31,6 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
   const total = calculateTotalWithFees(subtotal);
   const regularPrice = count * PRICE_PER_NUMBER;
   const savings = regularPrice - subtotal;
-  const freeNumbers = Math.floor(count / 6); // One free per complete package
 
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
@@ -373,7 +372,7 @@ export function CheckoutModal({ isOpen, selectedNumbers, pricePerNumber, onClose
                             <span>${regularPrice}</span>
                           </div>
                           <div className="flex justify-between text-green-400 font-semibold">
-                            <span>Discount ({freeNumbers} FREE!)</span>
+                            <span>Discount (5 for $100 deal)</span>
                             <span>-${savings}</span>
                           </div>
                           <div className="flex justify-between text-white font-bold pt-2 border-t border-yellow-500/30">

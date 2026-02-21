@@ -158,7 +158,7 @@ export function LandingPage() {
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/bingo")}
+          onClick={() => window.location.href = "https://midnightmafia.au"}
           className="relative group"
         >
           <motion.div
