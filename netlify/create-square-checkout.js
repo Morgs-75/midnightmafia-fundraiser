@@ -1,5 +1,17 @@
 import { SquareClient, SquareEnvironment } from 'square';
 import { randomUUID } from 'crypto';
+import { createClient } from '@supabase/supabase-js';
+
+// Pricing logic (mirrors src/lib/pricing.ts)
+function calculatePrice(count) {
+  if (count === 0) return 0;
+  if (count <= 4) return count * 25;
+  return 100 + ((count - 5) * 25);
+}
+
+function calculateTotalWithFees(subtotal) {
+  return Math.ceil((subtotal / 0.978) * 100) / 100;
+}
 
 const client = new SquareClient({
   token: process.env.SQUARE_ACCESS_TOKEN,
@@ -23,6 +35,37 @@ export async function handler(event) {
       };
     }
 
+    // Validate quantity is a reasonable integer
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 10) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Invalid quantity' }) };
+    }
+
+    // Server-side amount validation — prevent client-side price tampering
+    const expectedSubtotal = calculatePrice(quantity);
+    const expectedTotal = calculateTotalWithFees(expectedSubtotal);
+    const expectedCents = Math.round(expectedTotal * 100);
+
+    if (amount !== expectedCents) {
+      console.error(`Amount mismatch: client sent ${amount} cents, expected ${expectedCents} cents for qty ${quantity}`);
+      return { statusCode: 400, body: JSON.stringify({ error: 'Amount does not match expected price' }) };
+    }
+
+    // Verify the hold still exists and hasn't expired
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data: hold, error: holdError } = await supabase
+      .from('holds')
+      .select('id, expires_at')
+      .eq('id', holdId)
+      .single();
+
+    if (holdError || !hold) {
+      return { statusCode: 404, body: JSON.stringify({ error: 'Hold not found or expired. Please start over.' }) };
+    }
+
+    if (new Date(hold.expires_at) < new Date()) {
+      return { statusCode: 410, body: JSON.stringify({ error: 'Hold has expired. Please select numbers again.' }) };
+    }
+
     console.log('Creating Square payment link:', { holdId, quantity, amount });
 
     const response = await client.checkout.paymentLinks.create({
@@ -30,7 +73,7 @@ export async function handler(event) {
       quickPay: {
         name: `Fundraiser Number${quantity > 1 ? 's' : ''} (${quantity})`,
         priceMoney: {
-          amount: BigInt(amount), // amount in cents
+          amount: BigInt(expectedCents),
           currency: 'AUD',
         },
         locationId: process.env.SQUARE_LOCATION_ID,
@@ -38,7 +81,7 @@ export async function handler(event) {
       checkoutOptions: {
         redirectUrl: `${process.env.SITE_URL}/success.html`,
       },
-      paymentNote: holdId, // stored on Payment.note for webhook correlation
+      paymentNote: holdId,
     });
 
     const paymentLink = response.data?.paymentLink ?? response.paymentLink;
@@ -48,7 +91,7 @@ export async function handler(event) {
       throw new Error('No payment link URL returned from Square');
     }
 
-    console.log('✅ Square payment link created:', paymentLink.id);
+    console.log('\u2705 Square payment link created:', paymentLink.id);
 
     return {
       statusCode: 200,

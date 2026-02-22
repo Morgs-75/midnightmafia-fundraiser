@@ -115,7 +115,7 @@ export async function handler(event) {
 
     if (updateError) {
       console.error('❌ Error updating numbers:', updateError.message);
-      return { statusCode: 500, body: JSON.stringify({ error: 'Error updating numbers', details: updateError.message }) };
+      return { statusCode: 500, body: JSON.stringify({ error: 'Payment processing failed. Please contact support.' }) };
     }
 
     console.log(`✅ Updated ${updatedNumbers?.length || 0} numbers to sold`);

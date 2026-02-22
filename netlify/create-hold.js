@@ -13,6 +13,8 @@ const validatePhone = (phone) => {
   return phoneRegex.test(phoneDigits);
 };
 
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function handler(event) {
   const { numbers, displayName, email, phone, message, boardId } = JSON.parse(event.body);
 
@@ -35,8 +37,14 @@ export async function handler(event) {
   if (!Array.isArray(numbers) || numbers.length === 0 || numbers.length > 10) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Must select 1-10 numbers' }) };
   }
-  if (!boardId) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Board ID is required' }) };
+  // Validate each number is an integer in range 1-200
+  for (const num of numbers) {
+    if (!Number.isInteger(num) || num < 1 || num > 200) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Numbers must be integers between 1 and 200' }) };
+    }
+  }
+  if (!boardId || !uuidRegex.test(boardId)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid board ID' }) };
   }
 
   const supabase = createClient(
@@ -77,32 +85,38 @@ export async function handler(event) {
     .update({
       status: 'held',
       hold_expires_at: expiresAt,
-      hold_id: hold.id  // Link numbers to this specific hold
+      hold_id: hold.id
     })
     .in('number', numbers)
     .eq('board_id', boardId)
-    .eq('status', 'available')  // Only update if still available
+    .eq('status', 'available')
     .select();
 
   if (updateError) {
     console.error('Error updating numbers to held:', updateError);
+    // Clean up the hold record
+    await supabase.from('holds').delete().eq('id', hold.id);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to mark numbers as held', details: updateError.message })
+      body: JSON.stringify({ error: 'Failed to reserve your numbers. Please try again.' })
     };
   }
 
-  console.log(`✅ Marked ${updatedNumbers?.length || 0} numbers as held`);
+  // Race condition check: if fewer numbers updated than requested, some were just taken
+  if (!updatedNumbers || updatedNumbers.length < numbers.length) {
+    // Clean up partial hold
+    await supabase.from('numbers').update({ status: 'available', hold_expires_at: null, hold_id: null })
+      .in('number', (updatedNumbers || []).map(n => n.number)).eq('board_id', boardId);
+    await supabase.from('holds').delete().eq('id', hold.id);
+    return {
+      statusCode: 409,
+      body: JSON.stringify({ error: 'One or more numbers were just taken. Please select different numbers.' })
+    };
+  }
+
+  console.log(`\u2705 Marked ${updatedNumbers.length} numbers as held`);
   console.log('Numbers:', numbers);
   console.log('Board ID:', boardId);
-
-  if (!updatedNumbers || updatedNumbers.length === 0) {
-    console.error('⚠️ No numbers were updated to held status!');
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'No numbers were marked as held' })
-    };
-  }
 
   return {
     statusCode: 200,
